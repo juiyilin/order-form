@@ -1,17 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block title %}
+<title class="show-name">Order</title>
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
 
-<body>
-    <h1>Orders</h1>
-    {{order}}
-    <a href="/">返回</a>
-</body>
+{% block content %}
 
-</html>
+<h1 class="show-name">Orders</h1>
+<form id="order-form">
+    *姓名/公司名：<input type="text" id="name" required><br>
+    *產品：<br><label>
+        <input type="checkbox" class="product" value="product 1">product 1
+    </label>
+    <label>
+        <input type="checkbox" class="product" value="product 2">product 2
+    </label><br>
+    電話：<input type="tel" id="phone" placeholder="02 2222 2222"><br>
+    電子信箱：<input type="email" id="email" placeholder="abc@example.com"><br>
+    統編：<input type="tel" id="phone" placeholder="2222 2222"><br>
+    備註：<br><textarea cols="40" rows="5" id="addition" placeholder=""></textarea><br>
+    <button type="submit">建立</button>
+</form>
+<a href="/show">返回</a>
+{% endblock %}
+{% block js %}
+<script src="{{url_for('static',filename='js/order.js')}}"></script>
+{% endblock %}

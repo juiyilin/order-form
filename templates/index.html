@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>Welcome</title>
+{% endblock %}
+{% block content %}
+
+
+<form id="login-form">
+    <h2>登入</h2>
+    公司名稱：<input type="text" value="company" required>
+    信箱：<input type="email" value="admin@admin.com" required>
+    密碼：<input type="password" value="admin" required>
+    <button type="submit">登入</button>
+</form>
+<form id="signup-form">
+    <h2>第一次使用，註冊管理員帳號</h2>
+    公司名稱：<input type="text" value="company" required>
+    管理員名稱：<input type="text" value="admin" required>
+    信箱：<input type="email" value="admin@admin.com" required>
+    密碼：<input type="password" value="admin" required>
+    <button type="submit">註冊</button>
+</form>
+{% endblock %}
+
+{% block js %}
+<script src="{{url_for('static',filename='js/index.js')}}"></script>
+{% endblock %}
+
+
+</html>

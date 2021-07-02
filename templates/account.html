@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>account</title>
+{% endblock %}
+{% block content %}
+<h1>帳號管理</h1>
+<form id="create-account">
+    名稱: <input type="text" required value="test"><br>
+    信箱: <input type="email" required value="test@test.com"><br>
+    密碼: <input type="password" required value="test"><br>
+    權限：<select id="type">
+        <option value="高">高</option>
+        <option value="一般" selected>一般</option>
+    </select>
+    <button type="submit">建立</button>
+</form>
+<p>高權限: 可管理所有帳號資料</p>
+<p>一般權限： 僅可修改自己帳號資料</p>
+<hr>
+<div id="list-accounts">
+    <div class="row">
+        <div class="col">No.</div>
+        <div class="col">名稱</div>
+        <div class="col">信箱</div>
+        <div class="col">權限</div>
+        <div class="col">動作</div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="{{url_for('static',filename='js/account.js')}}"></script>
+{% endblock %}

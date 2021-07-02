@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>edit</title>
+{% endblock %}
+{% block content %}
+<h1>修改帳號</h1>
+<form id="edit-account">
+    名稱: <input type="text" required><br>
+    信箱: <input type="email" required><br>
+    原密碼: <input type="password" required><br>
+    新密碼: <input type="password" required><br>
+    權限：<span id="auth"></span><br>
+    <button type="submit">修改</button>
+</form>
+{% endblock %}
+{% block js %} <script src="{{url_for('static',filename='js/edit_account.js')}}">
+</script>
+{% endblock %}
