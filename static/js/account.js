@@ -3,47 +3,53 @@ window.addEventListener('load', () => {
     company = urlParams.get('company');
     fetch('/api/content').then(res => res.json())
         .then(data => {
-            let listAccounts = select('#list-accounts');
-            // console.log(data)
-            for (let i = 0; i < data.length; i++) {
-                // console.log(data[i]);
-                let row = document.createElement('div');
-                row.className = 'row';
-                for (let j = 0; j < 5; j++) {
-                    let col = document.createElement('div');
-                    col.className = 'col';
-                    if (j == 0) {
-                        //號碼
-                        col.textContent = i + 1;
-                    } else if (j == 4) {
-                        if (i == 0) {
-                            let button = document.createElement('button');
-                            button.textContent = '修改';
-                            button.className = 'edit';
-                            col.appendChild(button);
-                        } else {
-                            for (let b = 0; b < 2; b++) {
+            console.log(data)
+            if (data.result === 'error') {
+                console.log(nowUser)
+                // alert(data.message)
+                window.location = `${window.location.pathname}?name=${nowUser.user.name}`;
+            } else {
+                let listAccounts = select('#list-accounts');
+                for (let i = 0; i < data.length; i++) {
+                    // console.log(data[i]);
+                    let row = document.createElement('div');
+                    row.className = 'row';
+                    for (let j = 0; j < 5; j++) {
+                        let col = document.createElement('div');
+                        col.className = 'col';
+                        if (j == 0) {
+                            //號碼
+                            col.textContent = i + 1;
+                        } else if (j == 4) {
+                            if (i == 0) {
                                 let button = document.createElement('button');
-                                if (b == 0) {
-                                    button.textContent = '修改';
-                                    button.className = 'edit';
-                                } else {
-                                    button.textContent = '刪除';
-                                    button.className = 'delete';
-                                }
+                                button.textContent = '修改';
+                                button.className = 'edit';
                                 col.appendChild(button);
+                            } else {
+                                for (let b = 0; b < 2; b++) {
+                                    let button = document.createElement('button');
+                                    if (b == 0) {
+                                        button.textContent = '修改';
+                                        button.className = 'edit';
+                                    } else {
+                                        button.textContent = '刪除';
+                                        button.className = 'delete';
+                                    }
+                                    col.appendChild(button);
+                                }
                             }
+                        } else {
+                            //name,email,authority
+                            col.textContent = data[i][j - 1];
                         }
-                    } else {
-                        //name,email,authority
-                        col.textContent = data[i][j - 1];
+                        row.appendChild(col);
                     }
-                    row.appendChild(col);
+                    listAccounts.appendChild(row);
                 }
-                listAccounts.appendChild(row);
+                editButton();
+                deleteButton();
             }
-            editButton();
-            deleteButton();
         });
 
 });

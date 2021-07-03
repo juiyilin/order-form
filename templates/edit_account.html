@@ -3,14 +3,21 @@
 <title>edit</title>
 {% endblock %}
 {% block content %}
-<h1>修改帳號</h1>
+<h1>修改帳號-<span id="auth"></span>權限</h1>
 <form id="edit-account">
-    名稱: <input type="text" required><br>
-    信箱: <input type="email" required><br>
-    原密碼: <input type="password" required><br>
-    新密碼: <input type="password" required><br>
-    權限：<span id="auth"></span><br>
-    <button type="submit">修改</button>
+    <div id="before">
+        原名稱：<span id=""></span><br>
+        原信箱：<span id=""></span><br>
+        原密碼：<input type="password" required><br>
+
+    </div>
+    <div id="after">
+        新名稱: <input type="text" required><br>
+        新信箱: <input type="email" required><br>
+        新密碼: <input type="password" required><br>
+        <button type="submit">修改</button>
+    </div>
+
 </form>
 {% endblock %}
 {% block js %} <script src="{{url_for('static',filename='js/edit_account.js')}}">

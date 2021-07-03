@@ -33,6 +33,7 @@ fetch('/api/status').then(res => res.json())
     .then(user => {
         nowUser = user;
         console.log(user);
+        let welcome = select('#welcome');
         let manage = select('#manage');
         let log = select('#log');
         if (user.user === null) {
@@ -43,6 +44,7 @@ fetch('/api/status').then(res => res.json())
 
             }
         } else {
+            welcome.textContent = `Hello, ${user.user.name}`
             edit(manage, user.user);
             logout(log);
         }

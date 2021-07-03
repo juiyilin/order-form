@@ -20,20 +20,20 @@ def account(company):
 	name=request.args.get('name')
 	print('query name',name)
 	if name==None:
+		print('***',session)
 		return render_template('account.html')
 	else:
 		return render_template('edit_account.html')
-	# if session['user']['auth']=='高':
-	#  	return render_template('account.html')
-	# else:
-	#  	return render_template('edit_account.html')
- 
+	
+	
 @app.route('/<company>/show')
 def show(company):
-    return render_template('show.html')
+	return render_template('show.html')
+	
 @app.route('/<company>/<show_name>/order')
 def list_order(company,show_name):
     return render_template('order.html')
+	
 
 # error handle
 @app.errorhandler(400)
