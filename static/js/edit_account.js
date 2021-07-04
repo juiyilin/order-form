@@ -13,8 +13,7 @@ fetch(`/api/content?name=${name}`).then(res => res.json())
             for (let i = 0; i < 2; i++) {
                 before[i].textContent = user[i];
             }
-            let auth = select('#auth');
-            auth.textContent = user[2];
+
         }
     });
 
@@ -23,7 +22,7 @@ fetch(`/api/content?name=${name}`).then(res => res.json())
 let editAccount = select('#edit-account');
 editAccount.addEventListener('submit', (event) => {
     event.preventDefault();
-    inputs = selectAll('#edit-account input')
+    inputs = selectAll('#edit-account input');
 
     editData = {
         oldName: before[0].textContent,

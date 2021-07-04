@@ -1,6 +1,7 @@
 from flask import Blueprint,request,session,jsonify,abort
 from create_db_table import db as db
 import hashlib
+import re
 
 accounts = Blueprint( 'accounts', __name__ )
 
@@ -21,6 +22,8 @@ def status():
         # check mysql
         company=request.json['company']
         email=request.json['email']
+        if valid_email(email)==None:
+            abort(400,'密碼格式錯誤')
         password=to_hash(request.json['password'])
         conn,cursor=connect_db(db)
         print(*[company,email,password])
@@ -43,10 +46,9 @@ def status():
             }
        
         session['user']=user
-        
-        
         print(session)
         return jsonify(dict(session)),200
+
     if request.method=='DELETE':
         session.pop('user')
         return jsonify({'result':'success'}),200
@@ -68,13 +70,13 @@ def content():
         if name!=None:
             print('get 取得一筆帳號資料')
            
-            cursor.execute('select name,email,authority from accounts where company=%s and name = %s',(company,name))
+            cursor.execute('select name, email, authority from accounts where company=%s and name = %s',(company,name))
             get_one=cursor.fetchone()
             if get_one==None:
                 abort(400,'無此資料')
             close_db(conn,cursor)
             print(get_one)
-            return jsonify(get_one)
+            return jsonify(get_one),200
         else:
             if session['user']['auth']=='高':
                 print('get 取得所有帳號資料')
@@ -82,7 +84,7 @@ def content():
                 get_all=cursor.fetchall()
                 close_db(conn,cursor)
 
-                return jsonify(get_all)
+                return jsonify(get_all),200
             else:
                 abort(403,'沒有權限')
 
@@ -90,6 +92,8 @@ def content():
         name=request.json['name']
         # check email
         email=request.json['email']
+        if valid_email(email)==None:
+            abort(400,'密碼格式錯誤')
         # hash password
         password=to_hash(request.json['password'])
         conn,cursor=connect_db(db)
@@ -102,7 +106,7 @@ def content():
             
             # check company is exist
             try: 
-                cursor.execute('select * from companys where company = %s ',(company,))
+                cursor.execute('select * from companys where company = %s',(company,))
             except:
                 abort(500,'伺服器錯誤')
             else:
@@ -115,7 +119,7 @@ def content():
                         abort(500,'新增公司時發生不明錯誤')
                     
                     else:
-                        insert_account()
+                        insert_account(cursor,conn,company,name,email,password,authority)
 
                         # 新增完更新session
                         session['user']={
@@ -142,12 +146,14 @@ def content():
 
         return jsonify({'result':'success'}),200
 
-    if request.method=='PATCH': #TODO:
+    if request.method=='PATCH':
         print('PATCH 更新帳號資料')
         print(request.json)
         print(session['user'])
         old_name=request.json['oldName']
         old_email=request.json['oldEmail']
+        if valid_email(old_email)==None:
+            abort(400,'密碼格式錯誤')
         company=session['user']['company']
         old_password=to_hash(request.json['oldPassword'])
         conn,cursor=connect_db(db)
@@ -164,6 +170,8 @@ def content():
             print(get_account)
             new_name=request.json['newName']
             new_email=request.json['newEail']
+            if valid_email(new_email)==None:
+                abort(400,'密碼格式錯誤')
             new_password=to_hash(request.json['newPassword'])
             
             if get_account != None:
@@ -186,11 +194,13 @@ def content():
                         
                         if session['user']['name']==old_name:
                             company=session['user']['company']
+                            auth=session['user']['auth']
                             session.pop('user')
                             user={
                                 'company':company,
                                 'name':new_name,
                                 'email':new_email,
+                                'auth':auth
                             }
                             session['user']=user
                             print('new',session)
@@ -219,6 +229,10 @@ def content():
             return jsonify({'result':'success'}),200
  
 
+def valid_email(email):
+    pattern=r'^\w+@\w+\.+\w+\.*\w*\.*\w*'
+    result=re.match(pattern,email)
+    return result
 
 def to_hash(password):
     hash_type = hashlib.sha256()
