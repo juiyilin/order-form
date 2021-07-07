@@ -1,10 +1,12 @@
-from flask import Flask, render_template,Blueprint,jsonify,session,redirect,request
+from flask import Flask, render_template,Blueprint,jsonify,session,request
 from os import urandom
 from api.accounts import accounts
+from api.shows import shows
 
 
 app = Flask(__name__)
 app.register_blueprint(accounts, url_prefix='/api')
+app.register_blueprint(shows, url_prefix='/api')
 
 app.config['JSON_AS_ASCII']=False
 app.config['SEND_FILE_MAX_AGE_DEFAULT']=0
@@ -30,7 +32,7 @@ def account(company):
 def show(company):
 	return render_template('show.html')
 	
-@app.route('/<company>/<show_name>/order')
+@app.route('/<company>/show/<show_name>')
 def list_order(company,show_name):
     return render_template('order.html')
 	

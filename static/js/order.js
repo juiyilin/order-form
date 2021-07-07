@@ -1,6 +1,7 @@
 let showName = document.querySelectorAll('.show-name');
 showName.forEach(showname => {
-    showname.textContent = decodeURIComponent(window.location.pathname.split('/').join(' '));
+    console.log(window.location.pathname.split('/'))
+    showname.textContent = decodeURIComponent(window.location.pathname.split('/')[3]);
 });
 
 let orderForm = document.querySelector('#order-form');

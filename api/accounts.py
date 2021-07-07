@@ -1,5 +1,5 @@
 from flask import Blueprint,request,session,jsonify,abort
-from create_db_table import db as db
+from create_db_table import db,connect_db,close_db
 import hashlib
 import re
 
@@ -158,10 +158,10 @@ def content():
         old_password=to_hash(request.json['oldPassword'])
         conn,cursor=connect_db(db)
         
-        # check old data is correct
+        # check old password is correct
         try:
             cursor.execute('''
-            select * from accounts where (name = %s or email = %s) and company = %s and password = %s
+            select * from accounts where name = %s and email = %s and company = %s and password = %s
             ''',(old_name,old_email,company,old_password))
         except:
             abort(500)
@@ -171,11 +171,11 @@ def content():
             new_name=request.json['newName']
             new_email=request.json['newEail']
             if valid_email(new_email)==None:
-                abort(400,'密碼格式錯誤')
+                abort(400,'信箱格式錯誤')
             new_password=to_hash(request.json['newPassword'])
             
             if get_account != None:
-                # if true, old data is correct
+                # if true, old password is correct
                 if old_name!=new_name or old_email!=new_email:
                     #若old_name!=new_name 或 old_email!=new_email，檢查此公司new_name與new_email是否已被使用
                     cursor.execute('select * from accounts where company=%s and (name=%s or email=%s)',(company,new_name,new_email))
@@ -206,6 +206,18 @@ def content():
                             print('new',session)
                     else:
                         abort(400,'修改失敗， 名稱或Email 已被使用')
+                
+                else:
+                    #新舊name,email皆相同
+                    try:
+                        cursor.execute('''
+                        update accounts set name=%s, email=%s, password=%s 
+                        where company=%s and name=%s and email=%s and password=%s
+                        ''',(new_name,new_email,new_password,company,old_name,old_email,old_password))
+                    except:
+                        abort(500,'修改帳號時發生不明錯誤')
+                    conn.commit()
+                    close_db(conn,cursor)
             else:
                 abort(400,'原密碼輸入錯誤')
         return jsonify({'result':'success'}),200
@@ -241,14 +253,14 @@ def to_hash(password):
     p = hash_type.hexdigest()
     return p
 
-def connect_db(db):
-    conn=db.get_connection()
-    cursor=conn.cursor()
-    return conn,cursor
+# def connect_db(db):
+#     conn=db.get_connection()
+#     cursor=conn.cursor()
+#     return conn,cursor
 
-def close_db(conn,cursor):
-    cursor.close()
-    conn.close()
+# def close_db(conn,cursor):
+#     cursor.close()
+#     conn.close()
 
 def insert_account(cursor,conn,company,name,email,password,authority):
     try:

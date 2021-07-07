@@ -12,7 +12,14 @@ db=MySQLConnectionPool(
     pool_size=15,
     pool_reset_session=True
 )
+def connect_db(db):
+    conn=db.get_connection()
+    cursor=conn.cursor()
+    return conn,cursor
 
+def close_db(conn,cursor):
+    cursor.close()
+    conn.close()
 
 # check dbs
 def db_exist(db,cursor,dbname):
@@ -44,6 +51,14 @@ def create_table(cursor,table_name):
             time datetime default current_timestamp,
             foreign key(company) references companys(company) on delete cascade
         )''')
+    if table_name=='shows':
+        cursor.execute(f'''
+        create table {table_name}(
+            show_name varchar(255) character set utf8mb4 primary key,
+            region varchar(255) character set utf8mb4 not null,
+            start date not null,
+            end date not null
+        )''')
 
 if __name__=='__main__':
     db = mysql.connector.connect(
@@ -62,7 +77,7 @@ if __name__=='__main__':
 
 
     # table
-    table_name=['companys','accounts']
+    table_name=['companys','accounts','shows']
 
     cursor.execute('show tables')
     exist_tables=cursor.fetchall()

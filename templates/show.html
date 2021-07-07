@@ -9,35 +9,37 @@
 
 <body>
     {% block content %}
-
-    <!-- choose show -->
-    <form id="choose-show">
-        選擇展覽或下方建立展覽:
-        <input list="choose-list" id="choose">
-        <datalist id="choose-list">
-
-        </datalist>
-        <button type="submit">選擇</button>
-    </form>
-    <hr>
-
     <!-- create show -->
     <form id="create-show">
-        建立展覽：
-        地區：<input type="radio" name="region" id="domestic" value="國內" checked>
-        <label for="domestic">國內</label>
-        <input type="radio" name="region" id="foreign" value="國外">
-        <label for="foreign">國外</label>
-        名稱：<input type="text">
-        期間：<input id=calendar name="dates">
+        建立展覽：<br>
+        地區：
+        <label>
+            <input type="radio" name="region" value="domestic" checked required>
+            國內
+        </label>
+        <label>
+            <input type="radio" name="region" value="foreign" required>
+            國外
+        </label><br>
+        名稱：<input type="text" placeholder="" required value='abc'>
+        <!-- 期間：<input id=calendar name="dates"> -->
+        開始日期：<input type="date" required value='2021-07-07'>
+        結束日期：<input type="date" required value='2021-08-08'>
         <button type="submit">建立</button>
     </form>
+
+    <hr>
+    <!-- choose show -->
+    <div id="choose-choose">
+        <div id="domestic"></div>
+        <div id="foreign"></div>
+    </div>
     {% endblock %}
     {% block js %}
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
     <script src="{{url_for('static',filename='js/show.js')}}"></script>
     {% endblock %}
 

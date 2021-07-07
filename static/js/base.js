@@ -35,6 +35,7 @@ fetch('/api/status').then(res => res.json())
         console.log('status', user);
         let welcome = select('#welcome');
         let manage = select('#manage');
+        let show = select('#show');
         let log = select('#log');
         if (user.user === null) {
             console.log(window.location);
