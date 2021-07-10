@@ -1,11 +1,15 @@
-from flask import Flask, render_template,Blueprint,jsonify,session,request
+from flask import Flask, render_template,Blueprint,jsonify,session,request,redirect
 from os import urandom
+
+from flask.helpers import url_for
 from api.accounts import accounts
+from api.products import products
 from api.shows import shows
 
 
 app = Flask(__name__)
 app.register_blueprint(accounts, url_prefix='/api')
+app.register_blueprint(products, url_prefix='/api')
 app.register_blueprint(shows, url_prefix='/api')
 
 app.config['JSON_AS_ASCII']=False
@@ -16,7 +20,13 @@ app.secret_key=urandom(24)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+	if 'user' in session and session['user']!=None:
+		return redirect(url_for(menu)) #render_template('menu.html')
+	return render_template('index.html')
+
+@app.route('/<company>/menu')
+def menu(company):
+    return render_template('menu.html')
 @app.route('/<company>/accounts')
 def account(company):
 	name=request.args.get('name')
@@ -27,12 +37,15 @@ def account(company):
 	else:
 		return render_template('edit_account.html')
 	
-	
-@app.route('/<company>/show')
+@app.route('/<company>/products')
+def product(company):
+	return render_template('product.html')
+
+@app.route('/<company>/shows')
 def show(company):
 	return render_template('show.html')
 	
-@app.route('/<company>/show/<show_name>')
+@app.route('/<company>/shows/<show_name>')
 def list_order(company,show_name):
     return render_template('order.html')
 	
@@ -41,21 +54,21 @@ def list_order(company,show_name):
 @app.errorhandler(400)
 def input_error(error):
 	result={}
-	result['result']='error'
+	result['success']=False
 	result['message']=error.description
 	return jsonify(result), 400
  
 @app.errorhandler(403)
 def input_error(error):
 	result={}
-	result['result']='error'
+	result['success']=False
 	result['message']=error.description
 	return jsonify(result), 403
 
 @app.errorhandler(500)
 def server_error(error):
 	result={}
-	result['result']='error'
+	result['success']=False
 	result['message']=error.description
 	return jsonify(result),500
 

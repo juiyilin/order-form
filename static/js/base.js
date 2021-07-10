@@ -6,14 +6,19 @@ function selectAll(dom) {
     return document.querySelectorAll(dom);
 }
 
-function edit(tag, user) {
+function edit(tag, user, text) {
     let link = document.createElement('a');
-    if (user.auth === '高') {
-        link.href = `/${user.company}/accounts`;
+    let route = tag.id.split('-')[1];
+    if (route == 'accounts') {
+        if (user.auth === '高') {
+            link.href = `/${user.company}/${route}`;
+        } else {
+            link.href = `/${user.company}/${route}?name=${user.name}`;
+        }
     } else {
-        link.href = `/${user.company}/accounts?name=${user.name}`;
+        link.href = `/${user.company}/${route}`;
     }
-    link.textContent = '管理帳號';
+    link.textContent = text;
     tag.appendChild(link);
 }
 
@@ -34,8 +39,9 @@ fetch('/api/status').then(res => res.json())
         nowUser = user;
         console.log('status', user);
         let welcome = select('#welcome');
-        let manage = select('#manage');
-        let show = select('#show');
+        let manageAccount = select('#manage-accounts');
+        let manageProduct = select('#manage-products');
+        let manageShow = select('#manage-shows');
         let log = select('#log');
         if (user.user === null) {
             console.log(window.location);
@@ -46,7 +52,11 @@ fetch('/api/status').then(res => res.json())
             }
         } else {
             welcome.textContent = `Hello, ${user.user.name}`;
-            edit(manage, user.user);
+            let menu = [manageAccount, manageProduct, manageShow];
+            let menuText = ['帳號', '產品', '展覽'];
+            for (let i = 0; i < menu.length; i++) {
+                edit(menu[i], user.user, menuText[i]);
+            }
             logout(log);
         }
     });

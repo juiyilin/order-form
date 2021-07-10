@@ -21,9 +21,7 @@ forms.forEach(form => {
             }).then(res => res.json()).then(result => {
                 console.log(result);
                 if (result.user) {
-                    //TODO:
-                    window.location = `/${result.user.company}/show`;
-                    // window.location = `/${data.company}/accounts`;
+                    window.location = `/${result.user.company}/menu`;
 
                 } else {
                     alert(result.message);
@@ -47,7 +45,7 @@ forms.forEach(form => {
                 }).then(res => res.json())
                 .then(result => {
                     console.log(result);
-                    if (result.result === 'success') {
+                    if (result.success) {
 
                         // window.location = '/show';
                         window.location = `/${data.company}/accounts`;

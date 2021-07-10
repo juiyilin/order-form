@@ -12,24 +12,79 @@
 // $('input[name="dates"]').daterangepicker();
 
 function listShow(tag, array) {
-    let region = document.createElement('div')
+    let region = document.createElement('div');
     region.textContent = tag.id;
-    tag.appendChild(region)
+    tag.appendChild(region);
 
-    array.forEach(a => {
-        let row = document.createElement('div');
-        row.className = 'row'
-        let showName = document.createElement('div')
-        showName.textContent = a[0]
-        showName.className = 'show-name'
-        let period = document.createElement('div')
-        period.textContent = `${a[1]}-${a[2]}`
-        period.className = 'period'
-        row.appendChild(showName)
-        row.appendChild(period)
-        tag.appendChild(row)
-    })
+    array.forEach(arr => {
+        let label = document.createElement('label');
+        label.className = 'row';
+
+        let input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'show';
+        input.value = arr[0];
+
+        let showName = document.createElement('div');
+        showName.textContent = arr[0];
+        showName.className = 'show-name';
+
+        let period = document.createElement('div');
+        period.textContent = `${arr[1]}-${arr[2]}`;
+        period.className = 'period';
+
+        let action = document.createElement('div');
+        action.className = 'action';
+        let button = document.createElement('button');
+        button.className = 'delete';
+        button.textContent = '刪除';
+        deleteBtn(button);
+        action.appendChild(button);
+
+
+        label.appendChild(input);
+        label.appendChild(showName);
+        label.appendChild(period);
+        label.appendChild(action);
+
+        tag.appendChild(label);
+    });
 }
+
+
+
+
+function deleteBtn(btn) {
+    btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        let input = btn.parentNode.parentNode.querySelector('input');
+        input.checked = true;
+
+        if (input.checked) {
+            console.log(input.value);
+            fetch('/api/shows', {
+                    method: 'DELETE',
+                    body: JSON.stringify({
+                        showName: input.value
+                    }),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(res => res.json())
+                .then(result => {
+                    console.log(result);
+                    if (result.success) {
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                });
+
+        }
+    });
+}
+
+
 
 
 //create show 
@@ -57,7 +112,6 @@ create.addEventListener('submit', (event) => {
     };
     console.log(showData);
 
-    //TODO:session 資料庫
     fetch('/api/shows', {
             method: 'POST',
             body: JSON.stringify(showData),
@@ -67,26 +121,39 @@ create.addEventListener('submit', (event) => {
         }).then(res => res.json())
         .then(result => {
             if (result.result === 'error') {
-                alert(result.message)
+                alert(result.message);
             } else {
-                console.log(result)
+                console.log(result);
                 window.location = `/${nowUser.user.company}/show/${showData.showName}`;
             }
         });
 });
 
 
-//choose show 
+//load show 
 window.addEventListener('load', () => {
     fetch('/api/shows').then(res => res.json())
         .then(result => {
-            console.log(result)
+            console.log(result);
             let domestic = select('#domestic');
             let foreign = select('#foreign');
-            listShow(domestic, result.domestic)
-            listShow(foreign, result.foreign)
-        })
+            listShow(domestic, result.domestic);
+            listShow(foreign, result.foreign);
+        });
 
-    // TODO:資料庫
-    // window.location = `/${nowUser.user.company}/${chooseData}/order`;
+
+});
+
+//choose show
+let choose = select('#choose-show');
+choose.addEventListener('submit', (event) => {
+    event.preventDefault();
+    let inputs = choose.querySelectorAll('input');
+    inputs.forEach(input => {
+        if (input.checked) {
+            console.log(input.value);
+            window.location = `/${nowUser.user.company}/shows/${input.value}`;
+
+        }
+    });
 });

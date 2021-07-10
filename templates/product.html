@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% block content %}
+
+
+
+<form id="products">
+    <p>新增產品</p>
+    <p>型號：<input type="text" required value="item no 1"></p>
+    <p>價格：<input type="number"></p>
+    <button type="submit">新增</button>
+</form>
+{% endblock %}
+{% block js %}
+<script src="{{url_for('static',filename='js/product.js')}}"></script>
+{% endblock %}

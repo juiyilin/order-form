@@ -81,7 +81,7 @@ createAccount.addEventListener('submit', (event) => {
             'content-type': 'application/json'
         },
     }).then(resp => resp.json()).then(res => {
-        if (res.result === 'success') {
+        if (res.success) {
             alert('新增成功');
             window.location.reload();
         } else {
@@ -122,7 +122,7 @@ function deleteButton() {
                 }).then(res => res.json())
                 .then(result => {
                     console.log(result);
-                    if (result.result == 'success') {
+                    if (result.success) {
                         alert('帳號已刪除');
                         window.location.reload();
                     } else {

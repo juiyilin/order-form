@@ -22,7 +22,7 @@ fetch(`/api/content?name=${name}`).then(res => res.json())
 let editAccount = select('#edit-account');
 editAccount.addEventListener('submit', (event) => {
     event.preventDefault();
-    inputs = selectAll('#edit-account input');
+    let inputs = selectAll('#edit-account input');
 
     editData = {
         oldName: before[0].textContent,
@@ -40,7 +40,7 @@ editAccount.addEventListener('submit', (event) => {
             'content-type': 'application/json'
         },
     }).then(res => res.json()).then(result => {
-        if (result.result === 'success') {
+        if (result.success) {
             alert('修改成功');
             window.location = `${window.location.pathname}?name=${editData.newName}`;
         } else {

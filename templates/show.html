@@ -11,10 +11,10 @@
     {% block content %}
     <!-- create show -->
     <form id="create-show">
-        建立展覽：<br>
+        <p>建立展覽：</p>
         地區：
         <label>
-            <input type="radio" name="region" value="domestic" checked required>
+            <input type="radio" name="region" value="domestic" required>
             國內
         </label>
         <label>
@@ -30,10 +30,13 @@
 
     <hr>
     <!-- choose show -->
-    <div id="choose-choose">
+    <form id="choose-show">
+        <p>選擇或修改展覽：</p>
+
         <div id="domestic"></div>
         <div id="foreign"></div>
-    </div>
+        <button type="submit">選擇</button>
+    </form>
     {% endblock %}
     {% block js %}
 

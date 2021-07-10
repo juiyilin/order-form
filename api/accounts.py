@@ -51,7 +51,7 @@ def status():
 
     if request.method=='DELETE':
         session.pop('user')
-        return jsonify({'result':'success'}),200
+        return jsonify({'success':True}),200
 
     
 
@@ -144,7 +144,7 @@ def content():
             else:
                 abort(400,'新增失敗，名稱或信箱 已被使用')
 
-        return jsonify({'result':'success'}),200
+        return jsonify({'success':True}),200
 
     if request.method=='PATCH':
         print('PATCH 更新帳號資料')
@@ -220,7 +220,7 @@ def content():
                     close_db(conn,cursor)
             else:
                 abort(400,'原密碼輸入錯誤')
-        return jsonify({'result':'success'}),200
+        return jsonify({'success':True}),200
 
 
     if request.method=='DELETE':
@@ -238,7 +238,7 @@ def content():
             close_db(conn,cursor)
             if name==session['user']['name'] and email==session['user']['email']:
                 session.pop('user')
-            return jsonify({'result':'success'}),200
+            return jsonify({'success':True}),200
  
 
 def valid_email(email):

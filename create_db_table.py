@@ -54,10 +54,22 @@ def create_table(cursor,table_name):
     if table_name=='shows':
         cursor.execute(f'''
         create table {table_name}(
-            show_name varchar(255) character set utf8mb4 primary key,
+            company varchar(255) character set utf8mb4 not null,
+            show_name varchar(255) character set utf8mb4 not null,
             region varchar(255) character set utf8mb4 not null,
             start date not null,
-            end date not null
+            end date not null,
+            foreign key(company) references companys(company) on delete cascade
+        )''')
+    
+    if table_name=='products':
+        cursor.execute(f'''
+        create table {table_name}(
+            item_number varchar(255) character set utf8mb4 primary key,
+            company varchar(255) character set utf8mb4 not null,
+            price bigint,
+            img_link varchar(255),
+            foreign key(company) references companys(company) on delete cascade
         )''')
 
 if __name__=='__main__':
@@ -77,7 +89,7 @@ if __name__=='__main__':
 
 
     # table
-    table_name=['companys','accounts','shows']
+    table_name=['companys','accounts','shows','products']
 
     cursor.execute('show tables')
     exist_tables=cursor.fetchall()
