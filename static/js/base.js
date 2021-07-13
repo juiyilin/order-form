@@ -28,8 +28,10 @@ function logout(logout) {
         fetch('/api/status', {
             method: 'DELETE'
         }).then(res => res.json()).then(result => {
-            console.log(result);
-            window.location.reload();
+            if (result.success) {
+                console.log('out')
+                window.location = '/';
+            }
         });
     });
 }
@@ -48,7 +50,6 @@ fetch('/api/status').then(res => res.json())
 
             if (window.location.pathname !== '/') {
                 window.location = '/';
-
             }
         } else {
             welcome.textContent = `Hello, ${user.user.name}`;

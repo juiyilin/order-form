@@ -3,8 +3,8 @@ window.addEventListener('load', () => {
     company = urlParams.get('company');
     fetch('/api/content').then(res => res.json())
         .then(data => {
-            // console.log(data)
-            if (data.result === 'error') {
+            console.log(data)
+            if (nowUser.user.auth === '一般') {
                 // console.log(nowUser)
                 // alert(data.message)
                 window.location = `${window.location.pathname}?name=${nowUser.user.name}`;

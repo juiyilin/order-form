@@ -6,15 +6,12 @@
 
 {% block content %}
 
-<h1 class="show-name">Orders</h1>
+<h1 class="show-name"></h1>
 <form id="order-form">
     *姓名/公司名：<input type="text" id="name" required><br>
-    *產品：<br><label>
-        <div>product 1<input type="number" class="quantity" value="0"></div>
-    </label>
-    <label>
-        <div>product 2<input type="number" class="quantity" value="0"></div>
-    </label><br>
+    <p>*產品：</p>
+
+    <div id="products-list"></div>
     電話：<input type="tel" id="phone" placeholder="02 2222 2222"><br>
     電子信箱：<input type="email" id="email" placeholder="abc@example.com"><br>
     寄送地址：<input type="text" id="address" placeholder="台北市中正區重慶南路1段122號"><button id="search">郵遞區號查詢</button><br>
@@ -22,7 +19,7 @@
     備註：<br><textarea cols="40" rows="5" id="addition" placeholder=""></textarea><br>
     <button type="submit">建立</button>
 </form>
-<a href="../show">返回</a>
+<a href="../shows">返回</a>
 {% endblock %}
 {% block js %}
 <script src="{{url_for('static',filename='js/order.js')}}"></script>

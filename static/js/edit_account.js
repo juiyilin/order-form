@@ -5,9 +5,9 @@ console.log(window.location);
 fetch(`/api/content?name=${name}`).then(res => res.json())
     .then(user => {
         console.log(user);
-        if (user.result === 'error') {
-            // alert(user.message)
-            window.location = `${window.location.pathname}?name=${nowUser.user.name}`;
+        if (!user) {
+            alert(user.message)
+            // window.location = `${window.location.pathname}?name=${nowUser.user.name}`;
         } else {
             before = selectAll('#before span');
             for (let i = 0; i < 2; i++) {

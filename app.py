@@ -20,15 +20,19 @@ app.secret_key=urandom(24)
 
 @app.route('/')
 def index():
-	if 'user' in session and session['user']!=None:
-		return redirect(url_for(menu)) #render_template('menu.html')
+	
 	return render_template('index.html')
 
 @app.route('/<company>/menu')
 def menu(company):
-    return render_template('menu.html')
+	if session['user']['company']!=company:
+		return redirect(url_for('menu',company=session['user']['company']))
+	
+	return render_template('menu.html')
 @app.route('/<company>/accounts')
 def account(company):
+	if session['user']['company']!=company:
+		return redirect(url_for('menu',company=session['user']['company']))
 	name=request.args.get('name')
 	print('query name',name)
 	if name==None:
@@ -39,15 +43,21 @@ def account(company):
 	
 @app.route('/<company>/products')
 def product(company):
+	if (session['user']['company']!=company):
+		return redirect(url_for('menu',company=session['user']['company']))
 	return render_template('product.html')
 
 @app.route('/<company>/shows')
 def show(company):
+	if session['user']['company']!=company:
+		return redirect(url_for('menu',company=session['user']['company']))
 	return render_template('show.html')
 	
 @app.route('/<company>/shows/<show_name>')
 def list_order(company,show_name):
-    return render_template('order.html')
+	if session['user']['company']!=company:
+		return redirect(url_for('menu',company=session['user']['company']))
+	return render_template('order.html')
 	
 
 # error handle

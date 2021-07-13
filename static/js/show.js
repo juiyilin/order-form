@@ -13,7 +13,11 @@
 
 function listShow(tag, array) {
     let region = document.createElement('div');
-    region.textContent = tag.id;
+    if (tag.id === 'domestic') {
+        region.textContent = '國內';
+    } else {
+        region.textContent = '國外';
+    }
     tag.appendChild(region);
 
     array.forEach(arr => {
@@ -101,32 +105,32 @@ create.addEventListener('submit', (event) => {
     let start = create.querySelectorAll('input[type=date]')[0].value;
     let end = create.querySelectorAll('input[type=date]')[1].value;
     if (new Date(start) > new Date(end)) {
-        alert('開始日期必須大於或等於結束日期');
+        alert('開始日期必須小於或等於結束日期');
+    } else {
+        let showData = {
+            region: region,
+            showName: create.querySelector('input[type=text]').value,
+            start: start,
+            end: end,
+        };
+        console.log(showData);
+
+        fetch('/api/shows', {
+                method: 'POST',
+                body: JSON.stringify(showData),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(res => res.json())
+            .then(result => {
+                if (!result.success) {
+                    alert(result.message);
+                } else {
+                    console.log(result);
+                    window.location = `/${nowUser.user.company}/shows/${showData.showName}`;
+                }
+            });
     }
-
-    let showData = {
-        region: region,
-        showName: create.querySelector('input[type=text]').value,
-        start: start,
-        end: end,
-    };
-    console.log(showData);
-
-    fetch('/api/shows', {
-            method: 'POST',
-            body: JSON.stringify(showData),
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(res => res.json())
-        .then(result => {
-            if (result.result === 'error') {
-                alert(result.message);
-            } else {
-                console.log(result);
-                window.location = `/${nowUser.user.company}/show/${showData.showName}`;
-            }
-        });
 });
 
 

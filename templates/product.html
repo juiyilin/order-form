@@ -3,12 +3,20 @@
 
 
 
-<form id="products">
+<form id="create-products">
     <p>新增產品</p>
     <p>型號：<input type="text" required value="item no 1"></p>
-    <p>價格：<input type="number"></p>
+    <p>價格：$<input type="number"></p>
     <button type="submit">新增</button>
 </form>
+<div id="list-products">
+    <div class="row">
+        <div class="col">No.</div>
+        <div class="col">型號</div>
+        <div class="col">價格</div>
+        <div class="col">動作</div>
+    </div>
+</div>
 {% endblock %}
 {% block js %}
 <script src="{{url_for('static',filename='js/product.js')}}"></script>

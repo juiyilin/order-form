@@ -58,7 +58,7 @@ def show():
             }
 
             session['show']=show
-            return jsonify(dict(session['show'])),200
+            return jsonify({'success':True}),200
         else:
             abort(400,'此展覽名稱已存在')
 
