@@ -35,7 +35,8 @@ def create_table(cursor,table_name):
     if table_name=='companys':
         cursor.execute(f'''
         create table {table_name}(
-            company varchar(255) character set utf8mb4 primary key,
+            id bigint primary key auto_increment,
+            company varchar(255) character set utf8mb4 not null,
             logo_link varchar(255)
         )''')
 
@@ -43,33 +44,35 @@ def create_table(cursor,table_name):
         cursor.execute(f'''
         create table {table_name}(
             id bigint primary key auto_increment,
-            company varchar(255) character set utf8mb4 not null,
+            company_id bigint not null,
             name varchar(255) character set utf8mb4 not null,
             email varchar(255) character set utf8mb4 not null,
             password varchar(255) character set utf8mb4 not null,
             authority varchar(255) character set utf8mb4 not null,
             time datetime default current_timestamp,
-            foreign key(company) references companys(company) on delete cascade
+            foreign key(company_id) references companys(id) on delete cascade
         )''')
     if table_name=='shows':
         cursor.execute(f'''
         create table {table_name}(
-            company varchar(255) character set utf8mb4 not null,
+            id bigint primary key auto_increment,
+            company_id bigint not null,
             show_name varchar(255) character set utf8mb4 not null,
             region varchar(255) character set utf8mb4 not null,
             start date not null,
             end date not null,
-            foreign key(company) references companys(company) on delete cascade
+            foreign key(company_id) references companys(id) on delete cascade
         )''')
     
     if table_name=='products':
         cursor.execute(f'''
         create table {table_name}(
-            item_number varchar(255) character set utf8mb4 primary key,
-            company varchar(255) character set utf8mb4 not null,
+            id bigint primary key auto_increment,
+            item_number varchar(255) character set utf8mb4 not null,
+            company_id bigint not null,
             price bigint,
             img_link varchar(255),
-            foreign key(company) references companys(company) on delete cascade
+            foreign key(company_id) references companys(id) on delete cascade
         )''')
 
 if __name__=='__main__':

@@ -3,7 +3,7 @@ window.addEventListener('load', () => {
     company = urlParams.get('company');
     fetch('/api/content').then(res => res.json())
         .then(data => {
-            console.log(data)
+            console.log(data);
             if (nowUser.user.auth === '一般') {
                 // console.log(nowUser)
                 // alert(data.message)

@@ -25,14 +25,14 @@ def index():
 
 @app.route('/<company>/menu')
 def menu(company):
-	if session['user']['company']!=company:
-		return redirect(url_for('menu',company=session['user']['company']))
+	if session['company']['company']!=company:
+		return redirect(url_for('menu',company=session['company']['company']))
 	
 	return render_template('menu.html')
 @app.route('/<company>/accounts')
 def account(company):
-	if session['user']['company']!=company:
-		return redirect(url_for('menu',company=session['user']['company']))
+	if session['company']['company']!=company:
+		return redirect(url_for('menu',company=session['company']['company']))
 	name=request.args.get('name')
 	print('query name',name)
 	if name==None:
@@ -43,20 +43,20 @@ def account(company):
 	
 @app.route('/<company>/products')
 def product(company):
-	if (session['user']['company']!=company):
-		return redirect(url_for('menu',company=session['user']['company']))
+	if (session['company']['company']!=company):
+		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('product.html')
 
 @app.route('/<company>/shows')
 def show(company):
-	if session['user']['company']!=company:
-		return redirect(url_for('menu',company=session['user']['company']))
+	if session['company']['company']!=company:
+		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('show.html')
 	
 @app.route('/<company>/shows/<show_name>')
 def list_order(company,show_name):
-	if session['user']['company']!=company:
-		return redirect(url_for('menu',company=session['user']['company']))
+	if session['company']['company']!=company:
+		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('order.html')
 	
 

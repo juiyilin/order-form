@@ -6,17 +6,17 @@ function selectAll(dom) {
     return document.querySelectorAll(dom);
 }
 
-function edit(tag, user, text) {
+function edit(tag, company, user, text) {
     let link = document.createElement('a');
     let route = tag.id.split('-')[1];
     if (route == 'accounts') {
         if (user.auth === '高') {
-            link.href = `/${user.company}/${route}`;
+            link.href = `/${company.company}/${route}`;
         } else {
-            link.href = `/${user.company}/${route}?name=${user.name}`;
+            link.href = `/${company.company}/${route}?name=${user.name}`;
         }
     } else {
-        link.href = `/${user.company}/${route}`;
+        link.href = `/${company.company}/${route}`;
     }
     link.textContent = text;
     tag.appendChild(link);
@@ -56,7 +56,7 @@ fetch('/api/status').then(res => res.json())
             let menu = [manageAccount, manageProduct, manageShow];
             let menuText = ['帳號', '產品', '展覽'];
             for (let i = 0; i < menu.length; i++) {
-                edit(menu[i], user.user, menuText[i]);
+                edit(menu[i], user.company, user.user, menuText[i]);
             }
             logout(log);
         }
