@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-<title class="show-name">Order</title>
+<title class="show-name"></title>
 {% endblock %}
 
 
@@ -8,17 +8,28 @@
 
 <h1 class="show-name"></h1>
 <form id="order-form">
-    *姓名/公司名：<input type="text" id="name" required><br>
+    *姓名/公司名：<input type="text" id="customer" required value="customer"><br>
     <p>*產品：</p>
 
     <div id="products-list"></div>
-    電話：<input type="tel" id="phone" placeholder="02 2222 2222"><br>
-    電子信箱：<input type="email" id="email" placeholder="abc@example.com"><br>
-    寄送地址：<input type="text" id="address" placeholder="台北市中正區重慶南路1段122號"><button id="search">郵遞區號查詢</button><br>
-    統編：<input type="tel" id="phone" placeholder="2222 2222"><br>
-    備註：<br><textarea cols="40" rows="5" id="addition" placeholder=""></textarea><br>
+    電話：<input type="tel" id="phone" placeholder="02 2222 2222" value="02 2222 2222"><br>
+    電子信箱：<input type="email" id="email" placeholder="abc@example.com" value="abc@example.com"><br>
+    寄送地址：<input type="text" id="address" placeholder="台北市中正區重慶南路1段122號" value="台北市中正區重慶南路1段122號"><button
+        id="search">郵遞區號查詢</button><br>
+    統編：<input type="tel" id="tax-id" placeholder="22222222" value="22222222"><br>
+    備註：<br><textarea cols="40" rows="5" id="comment" placeholder=""></textarea><br>
     <button type="submit">建立</button>
 </form>
+<div id="list-orders">
+    <div class="row">
+        <div class="no">No.</div>
+        <div class="customer">姓名/公司名</div>
+        <div class="products">品項</div>
+        <div class="total">金額</div>
+        <div class="name">建立者</div>
+        <div class="action">動作</div>
+    </div>
+</div>
 <a href="../shows">返回</a>
 {% endblock %}
 {% block js %}

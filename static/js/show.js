@@ -27,14 +27,14 @@ function listShow(tag, array) {
         let input = document.createElement('input');
         input.type = 'radio';
         input.name = 'show';
-        input.value = arr[0];
+        input.value = arr[1];
 
         let showName = document.createElement('div');
-        showName.textContent = arr[0];
+        showName.textContent = arr[1];
         showName.className = 'show-name';
 
         let period = document.createElement('div');
-        period.textContent = `${arr[1]}-${arr[2]}`;
+        period.textContent = `${arr[2]}-${arr[3]}`;
         period.className = 'period';
 
         let action = document.createElement('div');
@@ -127,7 +127,7 @@ create.addEventListener('submit', (event) => {
                     alert(result.message);
                 } else {
                     console.log(result);
-                    window.location = `/${nowUser.user.company}/shows/${showData.showName}`;
+                    window.location = `/${nowUser.company.company}/shows/${showData.showName}`;
                 }
             });
     }
@@ -156,7 +156,11 @@ choose.addEventListener('submit', (event) => {
     inputs.forEach(input => {
         if (input.checked) {
             console.log(input.value);
-            window.location = `/${nowUser.user.company}/shows/${input.value}`;
+            fetch(`/api/show/${input.value}`).then(res => res.json()).then(result => {
+                if (result.success) {
+                    window.location = `/${nowUser.company.company}/shows/${input.value}`;
+                }
+            });
 
         }
     });

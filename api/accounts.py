@@ -13,9 +13,9 @@ def status():
     if request.method=='GET':
         print('get 取得session')
         print(session)
-        if 'user' not in session or 'company' not in session:
-            session['user']=None 
-            session['company']=None 
+        # if 'user' not in session or 'company' not in session:
+        #     session['user']=None 
+        #     session['company']=None 
         return jsonify(dict(session)),200
 
     if request.method=='PATCH':
@@ -57,8 +57,10 @@ def status():
         return jsonify(dict(session)),200
 
     if request.method=='DELETE':
-        session.pop('company')
-        session.pop('user')
+        print(session.keys())
+        session_keys=list(session.keys())
+        for k in session_keys:
+            session.pop(k)
         return jsonify({'success':True}),200
 
     
@@ -128,17 +130,19 @@ def content():
                     
                     else:
                         conn.commit()
-                        cursor.execute('select id from companys where company=%s',(company,))
-                        company_id=cursor.fetchone()[0]
+                        # cursor.execute('select id from companys where company=%s',(company,))
+                        # company_id=cursor.fetchone()[0]
+                        company_id=cursor.lastrowid
                         #company資料加入session
                         session['company']={
                             'id':company_id,
                             'company':company
                         }
-                        insert_account(cursor,conn,company_id,name,email,password,authority)
+                        user_id= insert_account(cursor,conn,company_id,name,email,password,authority)
 
                         # 新增完更新session
                         session['user']={
+                            'id':user_id,
                             'name':name,
                             'email':email,
                             'auth':authority
@@ -292,7 +296,12 @@ def insert_account(cursor,conn,company_id,name,email,password,authority):
     except:
         abort(500,'新增帳號時發生不明錯誤')
     conn.commit()
+    # get id
+    # cursor.execute('''select id from accounts where company_id=%s and name=%s and email=%s''',(company_id,name,email))
+    # user_id=cursor.fetchone()[0]
+    user_id=cursor.lastrowid
     close_db(conn,cursor)
+    return user_id
 
 def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,error_msg):
     if get_one==None:

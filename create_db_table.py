@@ -74,6 +74,27 @@ def create_table(cursor,table_name):
             img_link varchar(255),
             foreign key(company_id) references companys(id) on delete cascade
         )''')
+    
+    if table_name=='orders':
+        cursor.execute(f'''
+        create table {table_name}(
+            id bigint primary key auto_increment,
+            company_id bigint not null,
+            submitter_id bigint not null,
+            show_id bigint not null,
+            customer varchar(255) character set utf8mb4 not null,
+            products json not null,
+            quantities json not null,
+            total bigint,
+            phone varchar(25),
+            email varchar(255),
+            address varchar(255) character set utf8mb4,
+            tax_id varchar(25) character set utf8mb4,
+            comment text character set utf8mb4,
+            foreign key(company_id) references companys(id) on delete cascade,
+            foreign key(show_id) references shows(id) on delete cascade
+
+        )''')
 
 if __name__=='__main__':
     db = mysql.connector.connect(
@@ -92,7 +113,7 @@ if __name__=='__main__':
 
 
     # table
-    table_name=['companys','accounts','shows','products']
+    table_name=['companys','accounts','shows','products','orders']
 
     cursor.execute('show tables')
     exist_tables=cursor.fetchall()

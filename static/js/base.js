@@ -29,7 +29,6 @@ function logout(logout) {
             method: 'DELETE'
         }).then(res => res.json()).then(result => {
             if (result.success) {
-                console.log('out')
                 window.location = '/';
             }
         });
@@ -45,7 +44,7 @@ fetch('/api/status').then(res => res.json())
         let manageProduct = select('#manage-products');
         let manageShow = select('#manage-shows');
         let log = select('#log');
-        if (user.user === null) {
+        if (Object.keys(user).length === 0) {
             console.log(window.location);
 
             if (window.location.pathname !== '/') {

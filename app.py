@@ -5,12 +5,14 @@ from flask.helpers import url_for
 from api.accounts import accounts
 from api.products import products
 from api.shows import shows
+from api.orders import orders
 
 
 app = Flask(__name__)
 app.register_blueprint(accounts, url_prefix='/api')
 app.register_blueprint(products, url_prefix='/api')
 app.register_blueprint(shows, url_prefix='/api')
+app.register_blueprint(orders, url_prefix='/api')
 
 app.config['JSON_AS_ASCII']=False
 app.config['SEND_FILE_MAX_AGE_DEFAULT']=0
@@ -25,13 +27,17 @@ def index():
 
 @app.route('/<company>/menu')
 def menu(company):
-	if session['company']['company']!=company:
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
 		return redirect(url_for('menu',company=session['company']['company']))
 	
 	return render_template('menu.html')
 @app.route('/<company>/accounts')
 def account(company):
-	if session['company']['company']!=company:
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
 		return redirect(url_for('menu',company=session['company']['company']))
 	name=request.args.get('name')
 	print('query name',name)
@@ -43,21 +49,35 @@ def account(company):
 	
 @app.route('/<company>/products')
 def product(company):
-	if (session['company']['company']!=company):
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
 		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('product.html')
 
 @app.route('/<company>/shows')
 def show(company):
-	if session['company']['company']!=company:
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
 		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('show.html')
 	
 @app.route('/<company>/shows/<show_name>')
 def list_order(company,show_name):
-	if session['company']['company']!=company:
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
 		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('order.html')
+
+@app.route('/<company>/shows/<show_name>/<order_id>')
+def order(company,show_name,order_id):
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
+		return redirect(url_for('menu',company=session['company']['company']))
+	return render_template('order_id.html')
 	
 
 # error handle
