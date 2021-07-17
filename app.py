@@ -92,7 +92,7 @@ def input_error(error):
 def input_error(error):
 	result={}
 	result['success']=False
-	result['message']=error.description
+	result['message']='未登入系統'
 	return jsonify(result), 403
 
 @app.errorhandler(500)

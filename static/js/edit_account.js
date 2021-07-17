@@ -5,9 +5,9 @@ console.log(window.location);
 fetch(`/api/content?name=${name}`).then(res => res.json())
     .then(user => {
         console.log(user);
-        if (!user) {
+        if (!Array.isArray(user)) {
             alert(user.message);
-            // window.location = `${window.location.pathname}?name=${nowUser.user.name}`;
+            window.location = `${window.location.pathname}?name=${nowUser.user.name}`;
         } else {
             before = selectAll('#before span');
             userId = user[0];
