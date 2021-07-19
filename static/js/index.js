@@ -3,7 +3,6 @@ forms.forEach(form => {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         console.log(form);
-
         // login
         if (form.id === 'login-form') {
             let input = selectAll('#login-form input');
@@ -56,3 +55,13 @@ forms.forEach(form => {
         }
     });
 });
+let switches = selectAll('.switch');
+for (let i = 0; i < switches.length; i++) {
+    switches[i].addEventListener('click', () => {
+        if (switches[i].parentNode.style.display === '' || switches[i].parentNode.style.display === 'flex') {
+            switches[i].parentNode.style.display = 'none';
+            switches[switches.length - i - 1].parentNode.style.display = 'flex';
+        }
+
+    })
+}

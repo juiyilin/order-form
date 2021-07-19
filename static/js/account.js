@@ -22,21 +22,28 @@ window.addEventListener('load', () => {
                             col.textContent = i + 1;
                         } else if (j == 4) {
                             if (i == 0) {
-                                let button = document.createElement('button');
-                                button.textContent = '修改';
-                                button.className = 'edit';
-                                col.appendChild(button);
+                                let img = document.createElement('img');
+                                img.src = '/static/img/edit_24dp.png';
+                                img.width = '20';
+                                img.className = 'edit';
+                                img.title = '修改';
+                                col.appendChild(img);
                             } else {
                                 for (let b = 0; b < 2; b++) {
-                                    let button = document.createElement('button');
+                                    let img = document.createElement('img');
                                     if (b == 0) {
-                                        button.textContent = '修改';
-                                        button.className = 'edit';
+                                        img.src = '/static/img/edit_24dp.png';
+                                        img.width = '20';
+                                        img.className = 'edit';
+                                        img.title = '修改';
                                     } else {
-                                        button.textContent = '刪除';
-                                        button.className = 'delete';
+                                        img.src = '/static/img/icon_delete.png';
+                                        img.width = '20';
+                                        img.className = 'delete';
+                                        img.title = '刪除';
+
                                     }
-                                    col.appendChild(button);
+                                    col.appendChild(img);
                                 }
                             }
                         } else {
@@ -72,22 +79,26 @@ createAccount.addEventListener('submit', (event) => {
         password: values[2].value,
         authority: auth
     };
-    // console.log(account);
+    if (account.authority === '---') {
+        alert('請選擇帳號權限');
+    } else {
+        // console.log(account);
 
-    fetch('/api/content', {
-        method: 'POST',
-        body: JSON.stringify(account),
-        headers: {
-            'content-type': 'application/json'
-        },
-    }).then(resp => resp.json()).then(res => {
-        if (res.success) {
-            alert('新增成功');
-            window.location.reload();
-        } else {
-            alert(res.message);
-        }
-    });
+        fetch('/api/content', {
+            method: 'POST',
+            body: JSON.stringify(account),
+            headers: {
+                'content-type': 'application/json'
+            },
+        }).then(resp => resp.json()).then(res => {
+            if (res.success) {
+                alert('新增成功');
+                window.location.reload();
+            } else {
+                alert(res.message);
+            }
+        });
+    }
 });
 
 // edit account

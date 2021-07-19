@@ -78,6 +78,7 @@ def order_id(orderNum):
         data=data_handle(keys,get_one)
         
         return jsonify(data),200
+        
     if request.method=='PATCH':
         print('patch one order')
         print(request.json)

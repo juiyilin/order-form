@@ -6,12 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>menu</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/base.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/menu.css')}}">
 </head>
 
 <body>
     <nav>
-        <div id="welcome"></div>
-        <div id="log"></div>
+        <div class="left">
+            <div id="login-company"></div>
+        </div>
+        <div class="right">
+            <div id="welcome"></div>
+            <div id="log"></div>
+        </div>
     </nav>
     <div class="content">
         <div id="manage-accounts"></div>

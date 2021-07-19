@@ -39,6 +39,7 @@ fetch('/api/status').then(res => res.json())
     .then(user => {
         nowUser = user;
         console.log('status', user);
+        let loginCompany = select('#login-company');
         let welcome = select('#welcome');
         let manageAccount = select('#manage-accounts');
         let manageProduct = select('#manage-products');
@@ -51,6 +52,7 @@ fetch('/api/status').then(res => res.json())
                 window.location = '/';
             }
         } else {
+            loginCompany.textContent = user.company.company;
             welcome.textContent = `Hello, ${user.user.name}`;
             let menu = [manageAccount, manageProduct, manageShow];
             let menuText = ['帳號', '產品', '展覽'];

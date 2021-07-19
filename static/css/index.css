@@ -1,0 +1,58 @@
+form {
+    border: #e8e8e8 1px solid;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+
+}
+
+form p {
+    line-height: 20px;
+    /* border: olive 1px solid; */
+    margin-bottom: 2px;
+}
+
+form h2 {
+    border-bottom: 1px #000000 solid;
+    color: #000000;
+}
+
+
+
+form button {
+    background-color: #66AABB;
+    border: 2px solid #66AABB;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #448899;
+    border: 2px solid #448899;
+    cursor: pointer;
+}
+
+form .switch {
+    text-align: center;
+    border: 1px solid #66AABB;
+    height: 30px;
+    border-radius: 5px;
+    line-height: 32px;
+}
+
+form .switch:hover {
+    background-color: #ffffff;
+    color: #448899;
+    cursor: pointer;
+}
+
+
+
+
+#signup-form {
+    display: none;
+}

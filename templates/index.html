@@ -2,23 +2,28 @@
 {% block title %}
 <title>Welcome</title>
 {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+
+{% endblock %}
+
 {% block content %}
-
-
 <form id="login-form">
     <h2>登入</h2>
-    公司名稱：<input type="text" value="company" required>
-    信箱：<input type="email" value="admin@admin.com" required>
-    密碼：<input type="password" value="admin" required>
+    <p>公司名稱：</p><input type="text" value="company" required>
+    <p>信箱：</p><input type="email" value="admin@admin.com" required>
+    <p>密碼：</p><input type="password" value="admin" required>
     <button type="submit">登入</button>
+    <p class="switch">第一次使用，點此註冊管理員帳號</p>
 </form>
 <form id="signup-form">
-    <h2>第一次使用，註冊管理員帳號</h2>
-    公司名稱：<input type="text" value="company" required>
-    管理員名稱：<input type="text" value="admin" required>
-    信箱：<input type="email" value="admin@admin.com" required>
-    密碼：<input type="password" value="admin" required>
+    <h2>註冊管理員帳號</h2>
+    <p>公司名稱：</p><input type="text" value="company" required>
+    <p>管理員名稱：</p><input type="text" value="admin" required>
+    <p>信箱：</p><input type="email" value="admin@admin.com" required>
+    <p>密碼：</p><input type="password" value="admin" required>
     <button type="submit">註冊</button>
+    <p class="switch">已有帳號，點此登入</p>
 </form>
 {% endblock %}
 

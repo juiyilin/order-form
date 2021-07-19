@@ -120,7 +120,6 @@ function loadOrder(productsList) {
         }
         select('#total').textContent = `總計 $${data.total}`;
     });
-    // });
 }
 
 

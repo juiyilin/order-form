@@ -1,0 +1,19 @@
+#list-accounts {
+    width: 100%;
+    margin: 50px 0;
+}
+
+.row .col {
+    width: 47.5%;
+}
+
+.row .col:first-child {
+    width: 5%;
+}
+
+
+
+.row .col:nth-child(4),
+.row .col:last-child {
+    width: 10%;
+}
