@@ -12,22 +12,35 @@
 // $('input[name="dates"]').daterangepicker();
 
 function listShow(tag, array) {
-    let region = document.createElement('div');
+    let region = document.createElement('p');
     if (tag.id === 'domestic') {
         region.textContent = '國內';
     } else {
         region.textContent = '國外';
     }
     tag.appendChild(region);
+    let head = ['選取', '名稱', '期間', '動作'];
+    let row = document.createElement('div');
+    row.className = 'row';
+    head.forEach(h => {
+
+        let column = document.createElement('div');
+        column.className = 'col';
+        column.textContent = h;
+        row.appendChild(column);
+    });
+    tag.appendChild(row);
 
     array.forEach(arr => {
         let label = document.createElement('label');
         label.className = 'row';
 
+        let div = document.createElement('div');
         let input = document.createElement('input');
         input.type = 'radio';
         input.name = 'show';
         input.value = arr[1];
+        div.appendChild(input);
 
         let showName = document.createElement('div');
         showName.textContent = arr[1];
@@ -39,14 +52,16 @@ function listShow(tag, array) {
 
         let action = document.createElement('div');
         action.className = 'action';
-        let button = document.createElement('button');
-        button.className = 'delete';
-        button.textContent = '刪除';
-        deleteBtn(button);
-        action.appendChild(button);
+        let img = document.createElement('img');
+        img.className = 'delete';
+        img.title = '刪除';
+        img.src = '/static/img/icon_delete.png';
+        img.width = 20;
+        deleteBtn(img);
+        action.appendChild(img);
 
 
-        label.appendChild(input);
+        label.appendChild(div);
         label.appendChild(showName);
         label.appendChild(period);
         label.appendChild(action);
@@ -61,29 +76,32 @@ function listShow(tag, array) {
 function deleteBtn(btn) {
     btn.addEventListener('click', (event) => {
         event.preventDefault();
-        let input = btn.parentNode.parentNode.querySelector('input');
-        input.checked = true;
+        let check = confirm('確認後將刪除所有消費者資訊，確定刪除？');
+        if (check) {
+            let input = btn.parentNode.parentNode.querySelector('input');
+            input.checked = true;
 
-        if (input.checked) {
-            console.log(input.value);
-            fetch('/api/shows', {
-                    method: 'DELETE',
-                    body: JSON.stringify({
-                        showName: input.value
-                    }),
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                }).then(res => res.json())
-                .then(result => {
-                    console.log(result);
-                    if (result.success) {
-                        window.location.reload();
-                    } else {
-                        alert(result.message);
-                    }
-                });
+            if (input.checked) {
+                console.log(input.value);
+                fetch('/api/shows', {
+                        method: 'DELETE',
+                        body: JSON.stringify({
+                            showName: input.value
+                        }),
+                        headers: {
+                            'content-type': 'application/json'
+                        }
+                    }).then(res => res.json())
+                    .then(result => {
+                        console.log(result);
+                        if (result.success) {
+                            window.location.reload();
+                        } else {
+                            alert(result.message);
+                        }
+                    });
 
+            }
         }
     });
 }

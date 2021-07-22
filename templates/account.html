@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 {% block title %}
-<title>account</title>
+<title>帳號管理</title>
 {% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{{url_for('static',filename='css/account.css')}}">
 
 {% endblock %}
 {% block content %}
-<h1>帳號管理</h1>
+<h2>新增帳號</h2>
 <form id="create-account">
-    名稱: <input type="text" required value="test"><br>
-    信箱: <input type="email" required value="test@test.com"><br>
-    密碼: <input type="password" required value="test"><br>
-    權限：<select id="type">
-        <option value="---" selected>---</option>
-        <option value="高">高</option>
-        <option value="一般">一般</option>
-    </select>
+    <p>*名稱: <input type="text" required value="test"></p>
+    <p>*信箱: <input type="email" required value="test@test.com"></p>
+    <p>*密碼: <input type="password" required value="test"></p>
+    <p>*權限：<select id="type">
+            <option value="---" selected>---</option>
+            <option value="高">高</option>
+            <option value="一般">一般</option>
+        </select>
+        <sub></sub></p><br>
     <button type="submit">建立</button>
 </form>
-<p>高權限: 可管理所有帳號資料</p>
-<p>一般權限： 僅可修改自己帳號資料</p>
-<hr>
+
+<h2>帳號列表</h2>
 <div id="list-accounts">
     <div class="row">
         <div class="col">No.</div>

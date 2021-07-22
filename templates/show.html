@@ -1,37 +1,38 @@
 {% extends 'base.html' %}
 {% block title %}
-<title>Document</title>
+<title>管理展覽</title>
 {% endblock %}
 {% block css %}
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="{{url_for('static',filename='css/show.css')}}">
 {% endblock %}
 </head>
 
 <body>
     {% block content %}
     <!-- create show -->
+    <h2>建立展覽：</h2>
     <form id="create-show">
-        <p>建立展覽：</p>
-        地區：
-        <label>
-            <input type="radio" name="region" value="domestic" required>
-            國內
-        </label>
-        <label>
-            <input type="radio" name="region" value="foreign" required>
-            國外
-        </label><br>
-        名稱：<input type="text" placeholder="" required value='abc'>
+        <p>*地區：
+            <label>
+                <input type="radio" name="region" value="domestic" required>
+                國內
+            </label>
+            <label>
+                <input type="radio" name="region" value="foreign" required>
+                國外
+            </label></p>
+        <p>*名稱：<input type="text" placeholder="" required value='abc'></p>
         <!-- 期間：<input id=calendar name="dates"> -->
-        開始日期：<input type="date" required value='2021-07-07'>
-        結束日期：<input type="date" required value='2021-08-08'>
+        <p>*開始日期：<input type="date" required value='2021-07-07'></p>
+        <p>*結束日期：<input type="date" required value='2021-08-08'></p>
         <button type="submit">建立</button>
     </form>
 
     <hr>
     <!-- choose show -->
+    <h2>選擇展覽：</h2>
     <form id="choose-show">
-        <p>選擇展覽：</p>
 
         <div id="domestic"></div>
         <div id="foreign"></div>

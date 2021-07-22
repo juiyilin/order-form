@@ -1,6 +1,34 @@
+select {
+    border: #aabbcc solid 1px;
+    color: #666666;
+    border-radius: 5px;
+    height: 30px;
+    width: 100px;
+}
+
+select:focus {
+    border: #000000 solid 1px;
+    outline: 0;
+    border-radius: 5px;
+    box-shadow: 0 0 3px 0;
+    height: 30px;
+}
+
+sub {
+    color: #dc3545;
+}
+
+
+
+
+button:hover {
+    background-color: #448899;
+    color: #ffffff;
+}
+
 #list-accounts {
     width: 100%;
-    margin: 50px 0;
+    margin: 0 0 50px 0;
 }
 
 .row .col {
@@ -16,4 +44,37 @@
 .row .col:nth-child(4),
 .row .col:last-child {
     width: 10%;
+}
+
+@media(max-width:700px) {
+    .row {
+        height: 50px;
+    }
+
+    .row .col:first-child {
+        width: 10%;
+    }
+
+    .row .col,
+    .row .col:nth-child(4),
+    .row .col:last-child {
+        width: 22.5%;
+    }
+}
+
+@media(max-width:450px) {
+
+    .row .col:nth-child(4),
+    .row .col:last-child {
+        width: 15%;
+    }
+
+    .row .col:nth-child(2) {
+        width: 20%;
+    }
+
+    .row .col {
+        width: 40%;
+    }
+
 }

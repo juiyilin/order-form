@@ -63,10 +63,25 @@ window.addEventListener('load', () => {
 
 // create new accounts
 let createAccount = document.querySelector('#create-account');
+let values = createAccount.querySelectorAll('input');
+let selectTag = createAccount.querySelector('select');
+selectTag.addEventListener('change', () => {
+
+    console.log(selectTag.value);
+    let sub = createAccount.querySelector('sub');
+    if (selectTag.value === '高') {
+        sub.textContent = '可管理所有帳號資料';
+    } else if (selectTag.value === '一般') {
+        sub.textContent = '僅可修改自己帳號資料';
+    } else {
+        sub.textContent = '';
+    }
+
+});
 createAccount.addEventListener('submit', (event) => {
     event.preventDefault();
-    let values = createAccount.querySelectorAll('input');
     let selects = createAccount.querySelectorAll('select option');
+
     let auth;
     selects.forEach(select => {
         if (select.selected) {
@@ -117,29 +132,32 @@ function deleteButton() {
     let deletes = selectAll('.delete');
     deletes.forEach(del => {
         del.addEventListener('click', () => {
-            let name = del.parentNode.parentNode.querySelectorAll('.col')[1].textContent;
-            let email = del.parentNode.parentNode.querySelectorAll('.col')[2].textContent;
+            let check = confirm('確定刪除嗎');
+            if (check) {
+                let name = del.parentNode.parentNode.querySelectorAll('.col')[1].textContent;
+                let email = del.parentNode.parentNode.querySelectorAll('.col')[2].textContent;
 
-            let account = {
-                name: name,
-                email: email
-            };
-            fetch('/api/content', {
-                    method: 'DELETE',
-                    body: JSON.stringify(account),
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                }).then(res => res.json())
-                .then(result => {
-                    console.log(result);
-                    if (result.success) {
-                        alert('帳號已刪除');
-                        window.location.reload();
-                    } else {
-                        alert('刪除失敗');
-                    }
-                });
+                let account = {
+                    name: name,
+                    email: email
+                };
+                fetch('/api/content', {
+                        method: 'DELETE',
+                        body: JSON.stringify(account),
+                        headers: {
+                            'content-type': 'application/json'
+                        }
+                    }).then(res => res.json())
+                    .then(result => {
+                        console.log(result);
+                        if (result.success) {
+                            alert('帳號已刪除');
+                            window.location.reload();
+                        } else {
+                            alert('刪除失敗');
+                        }
+                    });
+            }
         });
     });
 }

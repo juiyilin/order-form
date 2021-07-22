@@ -1,14 +1,21 @@
 {% extends 'base.html'%}
+{% block title %}
+<title>產品管理</title>
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/product.css')}}">
+{% endblock %}
 {% block content %}
 
 
 
+<h2>新增產品</h2>
 <form id="create-products">
-    <p>新增產品</p>
-    <p>型號：<input type="text" required value="item no 1"></p>
-    <p>價格：$<input type="number"></p>
+    <p>*型號： <input type="text" required value="item no 1"></p>
+    <p>價格：$<input type="number" placeholder="台幣價格"></p>
     <button type="submit">新增</button>
 </form>
+<h2>產品列表</h2>
 <div id="list-products">
     <div class="row">
         <div class="col">No.</div>

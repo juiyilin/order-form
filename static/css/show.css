@@ -1,0 +1,73 @@
+input[type=radio] {
+    width: 15px;
+    height: 15px;
+}
+
+input[type=radio]:checked {
+    -webkit-appearance: none;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    background-color: #66AABB;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 3px 0px;
+}
+
+button:hover {
+    background-color: #448899;
+    color: #ffffff;
+}
+
+#choose-show div>div:nth-child(2) {
+    height: 30px;
+    border-bottom: #448899 solid 1px;
+    background-color: #66aabb;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
+}
+
+#choose-show div>div:nth-child(2) {
+    background-color: #66aabb;
+}
+
+.row .col,
+.row div {
+    width: 45%;
+}
+
+.row .col:first-child,
+.row .col:last-child,
+.row div:first-child,
+.row div:last-child {
+    width: 10%;
+}
+
+.row div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media(max-width:400px) {
+    .content {
+        width: 90%;
+    }
+
+    .row {
+        height: 50px;
+    }
+
+    .row .col:first-child,
+    .row .col:last-child,
+    .row div:first-child,
+    .row div:last-child {
+        width: 25%;
+    }
+
+    .row .col,
+    .row div {
+        width: 25%;
+
+    }
+}

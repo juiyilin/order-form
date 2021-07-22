@@ -23,17 +23,17 @@ form h2 {
 
 
 form button {
-    background-color: #66AABB;
+    /* background-color: #66AABB;
     border: 2px solid #66AABB;
-    border-radius: 5px;
-    color: #ffffff;
+    border-radius: 5px; */
     font-weight: bold;
 }
 
 form button:hover {
     background-color: #448899;
-    border: 2px solid #448899;
+    border: 2px solid #66AABB;
     cursor: pointer;
+    color: #ffffff
 }
 
 form .switch {
@@ -48,6 +48,7 @@ form .switch:hover {
     background-color: #ffffff;
     color: #448899;
     cursor: pointer;
+    font-weight: bold;
 }
 
 

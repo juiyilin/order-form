@@ -11,10 +11,13 @@ function listProducts(data) {
                 col.textContent = j + 1;
 
             } else if (i == data[j].length + 1) {
-                let delBtn = document.createElement('button');
-                delBtn.textContent = '刪除';
-                delProduct(delBtn);
-                col.appendChild(delBtn);
+                let img = document.createElement('img');
+                img.src = '/static/img/icon_delete.png';
+                img.className = 'delete';
+                img.width = 20;
+                img.title = '刪除';
+                delProduct(img);
+                col.appendChild(img);
             } else {
                 col.textContent = data[j][i - 1];
             }
@@ -27,24 +30,27 @@ function listProducts(data) {
 
 function delProduct(btn) {
     btn.addEventListener('click', () => {
-        let row = btn.parentNode.parentNode.querySelectorAll('.col');
-        let itemNumber = row[1].textContent;
-        let price = row[2].textContent;
-        fetch('/api/products', {
-            method: 'DELETE',
-            body: JSON.stringify({
-                itemNumber: itemNumber,
-                price: price
-            }),
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(res => res.json()).then(result => {
-            if (result.success) {
-                alert('刪除成功');
-                window.location.reload();
-            }
-        });
+        let check = confirm('確定刪除嗎');
+        if (check) {
+            let row = btn.parentNode.parentNode.querySelectorAll('.col');
+            let itemNumber = row[1].textContent;
+            let price = row[2].textContent;
+            fetch('/api/products', {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    itemNumber: itemNumber,
+                    price: price
+                }),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(res => res.json()).then(result => {
+                if (result.success) {
+                    alert('刪除成功');
+                    window.location.reload();
+                }
+            });
+        }
     });
 }
 

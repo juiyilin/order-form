@@ -52,10 +52,23 @@ async function loadProducts(sum) {
     let products = await response.json();
 
     console.log(products);
-    let productsList = select('#products-list');
+    let productsList = select('#list-products');
     let quantityArray = [];
     let priceArray = [];
     let amountArray = [];
+
+    let titles = ['名稱', '單價', '數量', '金額'];
+    let row = document.createElement('div');
+    row.className = 'row';
+    titles.forEach(title => {
+        let col = document.createElement('div');
+        col.className = 'col';
+        col.textContent = title;
+        row.appendChild(col);
+    });
+
+    productsList.appendChild(row);
+
     products.forEach(product => {
         let row = document.createElement('div');
         row.className = 'row';
@@ -67,11 +80,13 @@ async function loadProducts(sum) {
         price.textContent = product[1];
         priceArray.push(price);
 
+        let quantityDiv = document.createElement('div');
         let quantity = document.createElement('input');
         quantity.type = 'number';
         quantity.className = 'quantity';
         quantity.value = 0;
         quantity.min = 0;
+        quantityDiv.appendChild(quantity);
         quantityArray.push(quantity);
 
         let amount = document.createElement('div');
@@ -79,19 +94,23 @@ async function loadProducts(sum) {
         amount.textContent = 0;
         amountArray.push(amount);
 
-        itemNumber.appendChild(quantity);
+        itemNumber.appendChild(quantityDiv);
         row.appendChild(itemNumber);
         row.appendChild(price);
-        row.appendChild(quantity);
+        row.appendChild(quantityDiv);
         row.appendChild(amount);
         productsList.appendChild(row);
     });
+    row = document.createElement('row');
+    row.className = 'row';
     let total = document.createElement('div');
     total.id = 'total';
     total.textContent = '總計 $0';
+    row.appendChild(total);
+
     caculate(quantityArray, priceArray, amountArray, total);
 
-    productsList.appendChild(total);
+    productsList.appendChild(row);
     // console.log(productsList);
     return productsList;
 
@@ -110,7 +129,7 @@ function loadOrder(productsList) {
         select('#comment').value = data.comment;
         select('#submitter').textContent = data.submitter;
 
-        //#products-list 
+        //#list-products 
         let priceList = productsList.querySelectorAll('.price');
         let quantitiesList = productsList.querySelectorAll('.quantity');
         let amountList = productsList.querySelectorAll('.amount');
@@ -144,13 +163,13 @@ let orderForm = document.querySelector('#order-form');
 orderForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    let products = orderForm.querySelectorAll('#products-list .item-number');
+    let products = orderForm.querySelectorAll('#list-products .item-number');
     let productsArr = [];
     products.forEach(product => {
         productsArr.push(product.textContent);
     });
 
-    let quantities = orderForm.querySelectorAll('#products-list .quantity');
+    let quantities = orderForm.querySelectorAll('#list-products .quantity');
     let quantityArr = [];
     quantities.forEach(quantity => {
         quantityArr.push(parseInt(quantity.value));

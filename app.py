@@ -22,7 +22,8 @@ app.secret_key=urandom(24)
 
 @app.route('/')
 def index():
-	
+	if 'company' in session:
+		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('index.html')
 
 @app.route('/<company>/menu')
@@ -103,5 +104,5 @@ def server_error(error):
 	return jsonify(result),500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='localhost',debug=True)
  

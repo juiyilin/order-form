@@ -1,0 +1,113 @@
+#order-form>input {
+    width: 250px;
+}
+
+#list-products {
+    width: 90%;
+    margin: 0 auto;
+}
+
+#list-products .row:first-child {
+    height: 30px;
+    border-bottom: #000000 solid 1px;
+    background-color: #ffffff;
+    color: #666666;
+    font-weight: bold;
+}
+
+#list-products .row:last-child {
+    justify-content: flex-end;
+    border-top: 1px solid #000000;
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+
+
+#list-products .row div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+}
+
+#list-products .row div:last-child {
+    width: 12.5%;
+    justify-content: flex-end;
+
+}
+
+#list-products .row input {
+    width: 50px;
+    height: 20px;
+    text-align: right;
+    display: block;
+}
+
+
+#list-products #total {
+    margin-right: 12.5%;
+    width: 25%;
+}
+
+button {
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 2px solid #66AABB;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #448899;
+    color: #ffffff;
+}
+
+textarea {
+    border: #aabbcc solid 1px;
+    color: #666666;
+    border-radius: 5px;
+    width: 100%;
+    height: 150px;
+}
+
+textarea:focus {
+    border: #000000 solid 1px;
+    outline: 0;
+    border-radius: 5px;
+    box-shadow: 0 0 3px 0;
+}
+
+/* down */
+#list-orders .row {
+    height: fit-content;
+    /* justify-content: space-around; */
+    align-items: center;
+    padding: 10px 0;
+}
+
+#list-orders .row:first-child {
+    height: 30px;
+}
+
+#list-orders .row div:first-child {
+    width: 5%;
+}
+
+#list-orders .row div:nth-child(4) {
+    width: 10%;
+}
+
+#list-orders .row div:last-child {
+    width: 15%;
+}
+
+#list-orders .row div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 23%;
+}
+
+#list-orders button {
+    margin-top: 0;
+}

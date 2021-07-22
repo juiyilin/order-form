@@ -1,0 +1,28 @@
+#list-products {
+    margin: 0 0 50px 0;
+
+}
+
+button:hover {
+    background-color: #448899;
+    color: #ffffff;
+}
+
+
+
+.row .col {
+    width: 45%;
+}
+
+.row .col:last-child {
+    width: 5%;
+}
+
+@media(max-width:700px) {
+
+    .row .col,
+    .row .col:first-child,
+    .row .col:last-child {
+        width: 25%;
+    }
+}

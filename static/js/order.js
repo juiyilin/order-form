@@ -41,20 +41,33 @@ function searchPostCode(search, address) {
 
 }
 
-async function loadData() {
-    let productsList = await loadProducts(sum);
+// async function loadData() {
+//     let productsList = await loadProducts(sum);
 
-}
+// }
 
 async function loadProducts(sum) {
     let response = await fetch('/api/products');
     let products = await response.json();
 
     console.log(products);
-    let productsList = select('#products-list');
+    let productsList = select('#list-products');
     let quantityArray = [];
     let priceArray = [];
     let amountArray = [];
+
+    let titles = ['名稱', '單價', '數量', '金額'];
+    let row = document.createElement('div');
+    row.className = 'row';
+    titles.forEach(title => {
+        let col = document.createElement('div');
+        col.className = 'col';
+        col.textContent = title;
+        row.appendChild(col);
+    });
+
+    productsList.appendChild(row);
+
     products.forEach(product => {
         let row = document.createElement('div');
         row.className = 'row';
@@ -66,11 +79,13 @@ async function loadProducts(sum) {
         price.textContent = product[1];
         priceArray.push(price);
 
+        let quantityDiv = document.createElement('div');
         let quantity = document.createElement('input');
         quantity.type = 'number';
         quantity.className = 'quantity';
         quantity.value = 0;
         quantity.min = 0;
+        quantityDiv.appendChild(quantity);
         quantityArray.push(quantity);
 
         let amount = document.createElement('div');
@@ -78,20 +93,23 @@ async function loadProducts(sum) {
         amount.textContent = 0;
         amountArray.push(amount);
 
-        itemNumber.appendChild(quantity);
+        itemNumber.appendChild(quantityDiv);
         row.appendChild(itemNumber);
         row.appendChild(price);
-        row.appendChild(quantity);
+        row.appendChild(quantityDiv);
         row.appendChild(amount);
         productsList.appendChild(row);
     });
+    row = document.createElement('row');
+    row.className = 'row';
     let total = document.createElement('div');
     total.id = 'total';
     total.textContent = '總計 $0';
+    row.appendChild(total);
     caculate(quantityArray, priceArray, amountArray, total);
 
-    productsList.appendChild(total);
-    // console.log(productsList);
+
+    productsList.appendChild(row);
     return productsList;
 
 }
@@ -105,7 +123,7 @@ showName.forEach(showname => {
 
 //load data
 let sum = 0;
-loadData();
+loadProducts(sum);
 
 // load orders
 window.addEventListener('load', () => {
@@ -116,6 +134,7 @@ window.addEventListener('load', () => {
                 let row = document.createElement('div');
                 row.className = 'row';
                 row.textContent = '沒有資料';
+                row.id = 'no-data';
                 listOrders.appendChild(row);
             } else {
                 for (let i = 0; i < data.length; i++) {
@@ -154,7 +173,7 @@ window.addEventListener('load', () => {
                     name.className = 'name';
                     name.textContent = data[i].name;
 
-                    let action = document.createElement('div');
+                    let action = document.createElement('div'); // TODO:
                     action.className = 'action';
                     let hyperlink = document.createElement('a');
                     hyperlink.href = `${nowUser.show.name}/${i+1}`;

@@ -1,7 +1,13 @@
 nav {
     background-color: #ffffff;
     border-bottom: #e8e8e8 solid 1px;
+    width: 100%;
+}
+
+.nav {
     display: flex;
+    width: 1200px;
+    margin: 0 auto;
 }
 
 .right,
@@ -32,6 +38,14 @@ nav {
     cursor: pointer;
 }
 
+.fold2 {
+    display: none;
+}
+
+h2 {
+    margin-top: 50px;
+}
+
 .content {
     width: 1200px;
     margin: 0 auto;
@@ -47,8 +61,9 @@ p {
 
 input {
     border: #aabbcc solid 1px;
+    color: #666666;
     border-radius: 5px;
-    height: 30px;
+    height: 25px;
 }
 
 input:focus {
@@ -56,19 +71,29 @@ input:focus {
     outline: 0;
     border-radius: 5px;
     box-shadow: 0 0 3px 0;
-    height: 30px;
+    height: 25px;
 }
 
 button {
     height: 30px;
     margin-top: 10px;
+    line-height: 25px;
 }
 
-input {
-    color: #666666;
+button[type=submit] {
+    background-color: #ffffff;
+    border: 2px solid #66AABB;
+    border-radius: 5px;
+    color: #000000;
+    padding: 0 8px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 
+#no-data {
+    justify-content: center;
+}
 
 .row {
     border-bottom: #e8e8e8 solid 1.5px;
@@ -81,9 +106,6 @@ input {
     background-color: #e8e8e8;
 }
 
-.row:first-child:hover {
-    background-color: #66aabb;
-}
 
 .row:first-child {
     height: 30px;
@@ -92,6 +114,10 @@ input {
     color: #ffffff;
     font-weight: bold;
     border-radius: 5px 5px 0 0;
+}
+
+.row:first-child:hover {
+    background-color: #66aabb;
 }
 
 .row .col {
@@ -114,8 +140,29 @@ input {
 }
 
 @media (max-width:1200px) {
+    .nav {
+        width: 100%;
+    }
+
     .content {
         padding: 0 10px;
         width: 100%;
+    }
+
+
+}
+
+a {
+    margin: 20px 0;
+    display: block;
+}
+
+@media (max-width:650px) {
+    .fold1 {
+        display: none;
+    }
+
+    .fold2 {
+        display: block;
     }
 }
