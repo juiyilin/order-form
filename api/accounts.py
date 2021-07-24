@@ -1,5 +1,6 @@
 from flask import Blueprint,request,session,jsonify,abort
 from create_db_table import db,connect_db,close_db
+from werkzeug.utils import secure_filename
 import hashlib
 import re
 
@@ -103,19 +104,14 @@ def content():
                     abort(403,'沒有權限')
 
     if request.method=='POST':
-        name=request.json['name']
-        # check email
-        email=request.json['email']
-        if valid_email(email)==None:
-            abort(400,'密碼格式錯誤')
-        # hash password
-        password=to_hash(request.json['password'])
+        
         conn,cursor=connect_db(db)
 
-        if 'company' in request.json:
+        if 'company' in request.form:
             print('post 第一次註冊帳號')
-            print(request.json)
-            company=request.json['company']
+            print(request.form)
+            print(request.files['logo'].filename)
+            company=request.form['company']
             authority='高'
             
             # check company is exist
@@ -125,47 +121,55 @@ def content():
                 abort(500,'伺服器錯誤')
             else:
                 get_company=cursor.fetchone()
-                if get_company == None:
-                    try:
-                        # insert company
-                        cursor.execute('insert into companys (company) values(%s)',(company,))
-                    except:
-                        abort(500,'新增公司時發生不明錯誤')
+            #     if get_company == None:
+            #         try:
+            #             # insert company
+            #             cursor.execute('insert into companys (company) values(%s)',(company,))
+            #         except:
+            #             abort(500,'新增公司時發生不明錯誤')
                     
-                    else:
-                        conn.commit()
-                        # cursor.execute('select id from companys where company=%s',(company,))
-                        # company_id=cursor.fetchone()[0]
-                        company_id=cursor.lastrowid
-                        #company資料加入session
-                        session['company']={
-                            'id':company_id,
-                            'company':company
-                        }
-                        user_id= insert_account(cursor,conn,company_id,name,email,password,authority)
+            #         else:
+            #             conn.commit()
+            #             
+            #             company_id=cursor.lastrowid
+            #             #company資料加入session
+            #             session['company']={
+            #                 'id':company_id,
+            #                 'company':company
+            #             }
+                        # 新增管理員帳號
+                        #TODO:驗證email,password
+            #             user_id= insert_account(cursor,conn,company_id,name,email,password,authority)
 
-                        # 新增完更新session
-                        session['user']={
-                            'id':user_id,
-                            'name':name,
-                            'email':email,
-                            'auth':authority
-                        }
-                else:
-                    abort(400,'新增失敗，公司名稱 已被使用')
-        else:
-            print('post 新增其他使用者帳號')
-            print(request.json)
-            company_id=session['company']['id']
-            authority=request.json['authority']
+            #             # 新增完更新session
+            #             session['user']={
+            #                 'id':user_id,
+            #                 'name':name,
+            #                 'email':email,
+            #                 'auth':authority
+            #             }
+            #     else:
+            #         abort(400,'新增失敗，公司名稱 已被使用')
+        # else:
+        #     print('post 新增其他使用者帳號')
+        #     print(request.json)
+        #     company_id=session['company']['id']
+        # name=request.json['name']
+        # check email
+        # email=request.json['email']
+        # if valid_email(email)==None:
+        #     abort(400,'信箱格式錯誤')
+        # hash password
+        # password=to_hash(request.json['password'])
+        #     authority=request.json['authority']
 
-            # check name, email is exist in company
-            cursor.execute('select name, email from accounts where company_id=%s and (name=%s or email=%s)',(company_id,name,email))
-            get_one=cursor.fetchone()
-            if get_one==None:
-                insert_account(cursor,conn,company_id,name,email,password,authority)
-            else:
-                abort(400,'新增失敗，名稱或信箱 已被使用')
+        #     # check name, email is exist in company
+        #     cursor.execute('select name, email from accounts where company_id=%s and (name=%s or email=%s)',(company_id,name,email))
+        #     get_one=cursor.fetchone()
+        #     if get_one==None:
+        #         insert_account(cursor,conn,company_id,name,email,password,authority)
+        #     else:
+        #         abort(400,'新增失敗，名稱或信箱 已被使用')
 
         return jsonify({'success':True}),200
 
@@ -284,6 +288,7 @@ def content():
 def valid_email(email):
     pattern=r'^\w+@\w+\.+\w+\.*\w*\.*\w*'
     result=re.match(pattern,email)
+    print('valid email result',result)
     return result
 
 def to_hash(password):

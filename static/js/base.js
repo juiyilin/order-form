@@ -60,5 +60,19 @@ fetch('/api/status').then(res => res.json())
                 edit(menu[i], user.company, user.user, menuText[i]);
             }
             logout(log);
+            let expandImg = select('#expand img');
+            expandImg.src = '/static/img/expand.png';
         }
     });
+
+//expend menu
+let img = select('img');
+img.addEventListener('click', () => {
+    let right2 = select('.right-2');
+    console.log(right2)
+    if (right2.style.display == 'flex') {
+        right2.style.display = 'none';
+    } else {
+        right2.style.display = 'flex';
+    }
+});

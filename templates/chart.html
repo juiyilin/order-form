@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>圖表</title>
+{% endblock %}
+{% block css %}
+<style>
+</style>
+{% endblock %}
+{% block content %}
+<div id="piechart"></div>
+<div id="barchart"></div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="{{url_for('static',filename='js/chart.js')}}"></script>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-<title>Welcome</title>
+<title>消費者資訊紀錄系統 | Welcome</title>
 {% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
@@ -16,14 +16,23 @@
     <button type="submit">登入</button>
     <p class="switch">第一次使用，點此註冊管理員帳號</p>
 </form>
-<form id="signup-form">
-    <h2>註冊管理員帳號</h2>
-    <p>公司名稱：</p><input type="text" value="company" required>
-    <p>管理員名稱：</p><input type="text" value="admin" required>
-    <p>信箱：</p><input type="email" value="admin@admin.com" required>
-    <p>密碼：</p><input type="password" value="admin" required>
-    <button type="submit">註冊</button>
-    <p class="switch">已有帳號，點此登入</p>
+<form id="signup-form" enctype=multipart/form-data> <h2>註冊管理員帳號</h2>
+    <p>公司名稱：</p><input type="text" value="logo" required>
+    <p>公司Logo：</p>
+    <label for="upload-img">
+        <input type="file" accept="image/*" id="upload-img" name='logo'>
+        <p id="view">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                    d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
+            </svg>
+
+            <sub> 點此上傳(<=2MB)</sub> </p> </label> <p>管理員名稱：</p><input type="text" value="admin" required>
+        <p>信箱：</p><input type="email" value="admin@admin.com" required>
+        <p>密碼：</p><input type="password" value="admin" required>
+        <button type="submit">註冊</button>
+        <p class="switch">已有帳號，點此登入</p>
 </form>
 {% endblock %}
 

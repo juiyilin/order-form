@@ -78,6 +78,16 @@ textarea:focus {
 }
 
 /* down */
+#orders-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+img {
+    margin-bottom: -6px;
+}
+
 #list-orders .row {
     height: fit-content;
     /* justify-content: space-around; */
@@ -108,6 +118,36 @@ textarea:focus {
     width: 23%;
 }
 
-#list-orders button {
+/* #list-orders button {
     margin-top: 0;
+} */
+.more,
+#chart {
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 5px;
+    color: #000000;
+}
+
+#chart {
+    border: 2px solid #66aabb;
+
+}
+
+.more {
+    border: 1px solid #66aabb;
+    font-size: 10px;
+
+}
+
+.more:hover,
+#chart:hover {
+    background-color: #448899;
+    color: #ffffff;
+}
+
+@media(max-width:400px) {
+    #list-orders .row:first-child {
+        height: 50px;
+    }
 }

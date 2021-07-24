@@ -72,7 +72,7 @@ def list_order(company,show_name):
 		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('order.html')
 
-@app.route('/<company>/shows/<show_name>/<order_id>')
+@app.route('/<company>/shows/<show_name>/<int:order_id>')
 def order(company,show_name,order_id):
 	if 'company' not in session:
 		return redirect('/')
@@ -80,6 +80,13 @@ def order(company,show_name,order_id):
 		return redirect(url_for('menu',company=session['company']['company']))
 	return render_template('order_id.html')
 	
+@app.route('/<company>/shows/<show_name>/charts')
+def chart(company,show_name):
+	if 'company' not in session:
+		return redirect('/')
+	if (session['company']['company']!=company) :
+		return redirect(url_for('menu',company=session['company']['company']))
+	return render_template('chart.html')
 
 # error handle
 @app.errorhandler(400)

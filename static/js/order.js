@@ -76,8 +76,8 @@ async function loadProducts(sum) {
         itemNumber.textContent = product[0];
         let price = document.createElement('div');
         price.className = 'price';
-        price.textContent = product[1];
         priceArray.push(price);
+        price.textContent = `$ ${product[1]}`;
 
         let quantityDiv = document.createElement('div');
         let quantity = document.createElement('input');
@@ -115,11 +115,14 @@ async function loadProducts(sum) {
 }
 
 
-let showName = document.querySelectorAll('.show-name');
+let showName = selectAll('.show-name');
+let pathname = window.location.pathname;
 showName.forEach(showname => {
     // console.log(window.location.pathname.split('/'))
-    showname.textContent = decodeURIComponent(window.location.pathname.split('/')[3]);
+    showname.textContent = decodeURIComponent(pathname.split('/')[3]);
 });
+let chart = select('#chart');
+chart.href = `${pathname}/charts`;
 
 //load data
 let sum = 0;
@@ -173,14 +176,14 @@ window.addEventListener('load', () => {
                     name.className = 'name';
                     name.textContent = data[i].name;
 
-                    let action = document.createElement('div'); // TODO:
+                    let action = document.createElement('div');
                     action.className = 'action';
                     let hyperlink = document.createElement('a');
                     hyperlink.href = `${nowUser.show.name}/${i+1}`;
-                    let more = document.createElement('button');
-                    more.className = 'more';
-                    more.textContent = '詳細資料';
-                    action.appendChild(hyperlink).appendChild(more);
+                    hyperlink.textContent = '詳細資料';
+                    hyperlink.className = 'more';
+
+                    action.appendChild(hyperlink);
 
 
                     row.appendChild(no);

@@ -7,13 +7,15 @@ nav {
 .nav {
     display: flex;
     width: 1200px;
+    height: 50px;
     margin: 0 auto;
 }
 
 .right,
 .left {
     display: flex;
-    height: 50px;
+    /* height: 50px; */
+    /* height: 100%; */
     width: 50%;
     align-items: center;
     margin: 0 auto;
@@ -23,8 +25,14 @@ nav {
     justify-content: flex-end;
 }
 
-.right div,
-.left div {
+.right-2 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.right>div,
+.left>div {
     margin: 0 10px;
 }
 
@@ -34,11 +42,27 @@ nav {
     text-align: center;
 }
 
-#log {
+.right-2 div {
+    /* margin: 0 10px; */
+    padding: 0 10px;
+}
+
+.right-2 div:hover {
+    border-bottom: #66AABB 2px solid;
+    margin-bottom: -2px;
+}
+
+#log,
+#expand img {
     cursor: pointer;
 }
 
-.fold2 {
+#expand img {
+    height: 30px;
+}
+
+
+#expand {
     display: none;
 }
 
@@ -131,9 +155,6 @@ button[type=submit] {
 }
 
 
-
-
-
 .edit,
 .delete {
     cursor: pointer;
@@ -148,21 +169,60 @@ button[type=submit] {
         padding: 0 10px;
         width: 100%;
     }
-
-
 }
 
-a {
+a#back {
     margin: 20px 0;
     display: block;
 }
 
-@media (max-width:650px) {
-    .fold1 {
+@media (max-width:750px) {
+    .right-2 {
         display: none;
+        /* display: flex; */
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        position: absolute;
+        top: 50px;
+        border: 1px solid #e8e8e8;
+        border-radius: 5px;
+        box-shadow: 0 0 15px 0.1px #e8e8e8;
+        padding: 0;
+        width: 100px;
+        height: 120px;
     }
 
-    .fold2 {
+    .right-2 .fold1 {
+        height: 25%;
+        width: 100%;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+
+    }
+
+    .right-2 a {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .right-2 .fold1:hover,
+    .right-2 .fold1:hover a {
+        background-color: #66aabb;
+        color: #ffffff;
+        border: none;
+        margin-bottom: 1px;
+    }
+
+
+
+    #expand {
         display: block;
     }
 }
