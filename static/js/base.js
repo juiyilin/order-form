@@ -47,12 +47,19 @@ fetch('/api/status').then(res => res.json())
         let log = select('#log');
         if (Object.keys(user).length === 0) {
             console.log(window.location);
-
+            loginCompany.textContent = 'WELCOME';
             if (window.location.pathname !== '/') {
                 window.location = '/';
             }
         } else {
-            loginCompany.textContent = user.company.company;
+            loginCompany.textContent = '';
+            if (user.company.logo !== '') {
+                let logo = document.createElement('img');
+                logo.src = user.company.logo;
+                loginCompany.appendChild(logo);
+            } else {
+                loginCompany.textContent = user.company.company;
+            }
             welcome.textContent = `Hello, ${user.user.name}`;
             let menu = [manageAccount, manageProduct, manageShow];
             let menuText = ['帳號', '產品', '展覽'];
@@ -69,7 +76,6 @@ fetch('/api/status').then(res => res.json())
 let img = select('img');
 img.addEventListener('click', () => {
     let right2 = select('.right-2');
-    console.log(right2)
     if (right2.style.display == 'flex') {
         right2.style.display = 'none';
     } else {

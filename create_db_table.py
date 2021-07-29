@@ -4,7 +4,7 @@ import config
 
 
 db=MySQLConnectionPool(
-    host='localhost',
+    host=config.host,
     user=config.user, 
     password=config.password, 
     database='show_record_system',
@@ -93,12 +93,11 @@ def create_table(cursor,table_name):
             comment text character set utf8mb4,
             foreign key(company_id) references companys(id) on delete cascade,
             foreign key(show_id) references shows(id) on delete cascade
-
         )''')
 
 if __name__=='__main__':
     db = mysql.connector.connect(
-        host="localhost",
+        host=config.host,
         user=config.user,
         password=config.password
     )
@@ -109,7 +108,6 @@ if __name__=='__main__':
     if not db_exist(db,cursor,db_name):
         cursor.execute(f'create database {db_name}')
     db.database=db_name
-    # db.database='taipeispot'
 
 
     # table

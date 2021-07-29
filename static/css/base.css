@@ -21,6 +21,8 @@ nav {
     margin: 0 auto;
 }
 
+
+
 .right {
     justify-content: flex-end;
 }
@@ -34,6 +36,17 @@ nav {
 .right>div,
 .left>div {
     margin: 0 10px;
+    /* border: #000000 1px solid; */
+}
+
+.left>div {
+    height: 100%;
+    line-height: 50px;
+}
+
+.left img {
+    /* border: red 1px solid; */
+    height: 100%;
 }
 
 .right div a {

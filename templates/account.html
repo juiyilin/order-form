@@ -20,7 +20,23 @@
         <sub></sub></p><br>
     <button type="submit">建立</button>
 </form>
+<h2>公司資訊</h2>
+<form id="company-info" enctype=multipart/form-data> <p>公司名稱：<span></span></p>
+    <p>公司Logo：</p>
+    <label for="upload-img">
+        <input type="file" accept="image/*" id="upload-img" name='logo'>
+        <p id="view">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                    d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
+            </svg>
 
+            <sub> 點此上傳(<=2MB)</sub> <img src="" alt="">
+        </p>
+    </label>
+    <button type="submit">儲存</button>
+</form>
 <h2>帳號列表</h2>
 <div id="list-accounts">
     <div class="row">

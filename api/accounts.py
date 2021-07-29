@@ -3,6 +3,8 @@ from create_db_table import db,connect_db,close_db
 from werkzeug.utils import secure_filename
 import hashlib
 import re
+import boto3
+from config import bucket_name,AWSAccessKeyId,AWSSecretKey,cdn_domain
 
 accounts = Blueprint( 'accounts', __name__ )
 
@@ -31,7 +33,7 @@ def status():
         print(*[company,email,password])
         try:
             cursor.execute('''
-            select companys.id, companys.company,
+            select companys.id, companys.company,companys.logo_link,
             accounts.id, accounts.name, accounts.email, accounts.authority from companys 
             join accounts on companys.id=accounts.company_id where companys.company = %s and accounts.email = %s and accounts.password = %s''',(company,email,password))
         except:
@@ -44,13 +46,14 @@ def status():
             print(get_first)
             company={
                 'id':get_first[0],
-                'company':get_first[1]
-            }
+                'company':get_first[1],
+                'logo':get_first[2]
+            } 
             user={
-                'id':get_first[2],
-                'name':get_first[3],
-                'email':get_first[4],
-                'auth':get_first[5]
+                'id':get_first[3],
+                'name':get_first[4],
+                'email':get_first[5],
+                'auth':get_first[6]
             }
         session['company']=company
         session['user']=user
@@ -65,6 +68,27 @@ def status():
         return jsonify({'success':True}),200
 
     
+@accounts.route('/company', methods=['PATCH'])
+def company():
+    if 'company' not in session:
+        abort(403)
+    print('patch company')
+    print(request.files)
+    
+    company_id=session['company']['id']
+    company=session['company']['company']
+    img=request.files.get('logo')
+    img_link=''
+    if img!=None:
+        img_link=save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain)
+    try:
+        conn,cursor=connect_db(db)
+        cursor.execute('update companys set logo_link=%s where id=%s',(img_link,company_id))
+    except:
+        abort(500,'修改logo時發生不明錯誤')
+    conn.commit()
+    session['company']['logo']=img_link
+    return jsonify({'success':True}),200
 
     
 
@@ -110,10 +134,19 @@ def content():
         if 'company' in request.form:
             print('post 第一次註冊帳號')
             print(request.form)
-            print(request.files['logo'].filename)
+            print(request.files.get('logo'))
             company=request.form['company']
+            name=request.form['name']
             authority='高'
-            
+            img=request.files.get('logo')        
+            email=request.form['email']
+
+            #驗證email
+            if valid_email(email)==None:
+                cursor.execute('delete from companys where company=%s',(company,))
+                abort(400,'信箱格式錯誤')
+            #hash password
+            password=to_hash(request.form['password'])
             # check company is exist
             try: 
                 cursor.execute('select * from companys where company = %s',(company,))
@@ -121,55 +154,60 @@ def content():
                 abort(500,'伺服器錯誤')
             else:
                 get_company=cursor.fetchone()
-            #     if get_company == None:
-            #         try:
-            #             # insert company
-            #             cursor.execute('insert into companys (company) values(%s)',(company,))
-            #         except:
-            #             abort(500,'新增公司時發生不明錯誤')
+                if get_company == None:
+                    img_link=''
+                    if img!=None:
+                        img_link=save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain)
+                    try:
+                        # insert company
+                        cursor.execute('insert into companys (company,logo_link) values(%s,%s)',(company,img_link))
+                    except:
+                        abort(500,'新增公司時發生不明錯誤')
                     
-            #         else:
-            #             conn.commit()
-            #             
-            #             company_id=cursor.lastrowid
-            #             #company資料加入session
-            #             session['company']={
-            #                 'id':company_id,
-            #                 'company':company
-            #             }
+                    else:
+                        conn.commit()
+                        
+                        company_id=cursor.lastrowid
+                        #company資料加入session
+                        session['company']={
+                            'id':company_id,
+                            'company':company,
+                            'logo':img_link
+                        }
+
                         # 新增管理員帳號
-                        #TODO:驗證email,password
-            #             user_id= insert_account(cursor,conn,company_id,name,email,password,authority)
+                        user_id=insert_account(cursor,conn,company_id,name,email,password,authority)
 
-            #             # 新增完更新session
-            #             session['user']={
-            #                 'id':user_id,
-            #                 'name':name,
-            #                 'email':email,
-            #                 'auth':authority
-            #             }
-            #     else:
-            #         abort(400,'新增失敗，公司名稱 已被使用')
-        # else:
-        #     print('post 新增其他使用者帳號')
-        #     print(request.json)
-        #     company_id=session['company']['id']
-        # name=request.json['name']
-        # check email
-        # email=request.json['email']
-        # if valid_email(email)==None:
-        #     abort(400,'信箱格式錯誤')
-        # hash password
-        # password=to_hash(request.json['password'])
-        #     authority=request.json['authority']
+                        # 新增完更新session
+                        session['user']={
+                            'id':user_id,
+                            'name':name,
+                            'email':email,
+                            'auth':authority
+                        }
+                else:
+                    abort(400,'新增失敗，公司名稱 已被使用')
+        else:
+            print('post 新增其他使用者帳號')
+            print(request.json)
+            company_id=session['company']['id']
+            name=request.json['name']
+            #check email
+            email=request.json['email']
+            if valid_email(email)==None:
+                abort(400,'信箱格式錯誤')
+            #hash password
+            password=to_hash(request.json['password'])
+            authority=request.json['authority']
 
-        #     # check name, email is exist in company
-        #     cursor.execute('select name, email from accounts where company_id=%s and (name=%s or email=%s)',(company_id,name,email))
-        #     get_one=cursor.fetchone()
-        #     if get_one==None:
-        #         insert_account(cursor,conn,company_id,name,email,password,authority)
-        #     else:
-        #         abort(400,'新增失敗，名稱或信箱 已被使用')
+            # check name, email is exist in company
+            cursor.execute('select name, email from accounts where company_id=%s and (name=%s or email=%s)',(company_id,name,email))
+            get_one=cursor.fetchone()
+            if get_one==None:
+                insert_account(cursor,conn,company_id,name,email,password,authority)
+            else:
+                abort(400,'新增失敗，名稱或信箱 已被使用')
+            
 
         return jsonify({'success':True}),200
 
@@ -308,9 +346,6 @@ def insert_account(cursor,conn,company_id,name,email,password,authority):
     except:
         abort(500,'新增帳號時發生不明錯誤')
     conn.commit()
-    # get id
-    # cursor.execute('''select id from accounts where company_id=%s and name=%s and email=%s''',(company_id,name,email))
-    # user_id=cursor.fetchone()[0]
     user_id=cursor.lastrowid
     close_db(conn,cursor)
     return user_id
@@ -340,3 +375,22 @@ def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,e
             print('new',session)
     else:
         abort(400,error_msg)
+
+def save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain):
+    s3 = boto3.client(
+        "s3",
+        aws_access_key_id=AWSAccessKeyId,
+        aws_secret_access_key=AWSSecretKey
+    )
+    img_name = secure_filename(img.filename)
+    s3.upload_fileobj(
+        img,
+        bucket_name,
+        company+'/'+img_name,
+        ExtraArgs={
+            "ACL": "public-read", #Access control list
+            "ContentType": img.content_type
+        }
+    )
+    img_link=f'{cdn_domain}/{company}/{img.filename}'
+    return img_link

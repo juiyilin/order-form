@@ -93,3 +93,8 @@ label #view {
 label img {
     height: 100%;
 }
+
+#processing {
+    display: none;
+    text-align: center;
+}

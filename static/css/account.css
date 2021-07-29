@@ -4,6 +4,7 @@ select {
     border-radius: 5px;
     height: 30px;
     width: 100px;
+    background-color: #ffffff;
 }
 
 select:focus {
@@ -14,12 +15,46 @@ select:focus {
     height: 30px;
 }
 
-sub {
+#create-account sub {
     color: #dc3545;
 }
 
+/* company info */
+form input[type=file] {
+    display: none;
+}
 
+label {
+    height: 100px;
+    margin-bottom: 8px;
+    border: 3px solid #e8e8e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
 
+label #view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    /* border: 3px solid red; */
+    position: absolute;
+    top: -16px;
+}
+
+label img {
+    height: 100%;
+}
+
+#view svg,
+#view sub,
+#view img {
+    display: none;
+}
 
 button:hover {
     background-color: #448899;

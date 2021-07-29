@@ -2,6 +2,7 @@ let forms = selectAll('form');
 forms.forEach(form => {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
+
         // login
         if (form.id === 'login-form') {
             let input = selectAll('#login-form input');
@@ -26,14 +27,22 @@ forms.forEach(form => {
                 }
             });
         } else {
+            let processing = select('#processing');
+            processing.style.display = 'block';
+            processing.textContent = '註冊中...';
             // signup
             let input = selectAll('#signup-form input');
 
             let formData = new FormData();
             for (let i = 0; i < input.length; i++) {
-                let keys = ['company', 'logo', 'name', 'email', 'password']
+                let keys = ['company', 'logo', 'name', 'email', 'password'];
                 if (i == 1) {
-                    formData.append(keys[i], input[i].files[0]);
+                    if (input[i].files[0] === undefined) {
+                        formData.append(keys[i], '');
+
+                    } else {
+                        formData.append(keys[i], input[i].files[0]);
+                    }
 
                 } else {
                     formData.append(keys[i], input[i].value);
@@ -44,16 +53,14 @@ forms.forEach(form => {
             fetch('/api/content', {
                     method: 'POST',
                     body: formData,
-
                 }).then(res => res.json())
                 .then(result => {
                     console.log(result);
                     if (result.success) {
-
-                        // window.location = '/show';
-                        // window.location = `/${data.company}/accounts`;
+                        window.location = `/${formData.get('company')}/menu`;
                     } else {
                         alert(result.message);
+                        processing.style.display = 'none';
                     }
                 });
         }

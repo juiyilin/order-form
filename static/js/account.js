@@ -1,6 +1,7 @@
 window.addEventListener('load', () => {
     let urlParams = new URLSearchParams(window.location.search);
     company = urlParams.get('company');
+    //load accounts
     fetch('/api/content').then(res => res.json())
         .then(data => {
             console.log(data);
@@ -57,8 +58,38 @@ window.addEventListener('load', () => {
                 editButton();
                 deleteButton();
             }
+        }).then(() => {
+            //load company info
+            let companyInfo = select('#company-info');
+            companyInfo.querySelector('span').textContent = nowUser.company.company;
+            if (nowUser.company.logo !== '') {
+                let img = companyInfo.querySelector('img');
+                img.style.display = 'block';
+                img.src = nowUser.company.logo;
+            } else {
+                companyInfo.querySelector('svg').style.display = 'inline';
+                companyInfo.querySelector('sub').style.display = 'inline';
+            }
         });
+});
+//upload logo
+let label = select('label');
+let uploadImg = label.querySelector('#upload-img');
+let view = label.querySelector('#view');
+uploadImg.addEventListener('change', () => {
+    let img = uploadImg.files[0];
 
+    if (img) {
+        if (img.size / 1024 / 1024 < 2) {
+            view.textContent = '';
+            let image = document.createElement('img');
+            image.src = URL.createObjectURL(img);
+            image.style.display = 'block';
+            view.appendChild(image);
+        } else {
+            alert('檔案請勿超過2MB');
+        }
+    }
 });
 
 // create new accounts
@@ -115,7 +146,38 @@ createAccount.addEventListener('submit', (event) => {
         });
     }
 });
+// edit company info
+let companyInfo = select('#company-info');
+let input = companyInfo.querySelector('input');
+companyInfo.addEventListener('submit', (event) => {
+    event.preventDefault();
 
+    let formData = new FormData();
+    let key = 'logo';
+
+    if (input.files[0] === undefined) {
+        formData.append(key, '');
+
+    } else {
+        formData.append(key, input.files[0]);
+    }
+
+
+    fetch('/api/company', {
+            method: 'PATCH',
+            body: formData,
+        }).then(res => res.json())
+        .then(result => {
+            console.log(result);
+            if (result.success) {
+                alert('修改成功');
+                window.location.reload();
+            } else {
+                alert(result.message);
+            }
+        });
+
+});
 // edit account
 function editButton() {
     let edits = selectAll('.edit');
