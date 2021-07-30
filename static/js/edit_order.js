@@ -8,8 +8,9 @@ function caculate(qArray, pArray, amtArray, ttl) {
             } else {
                 q = parseInt(qArray[i].value);
             }
-            let p = parseInt(pArray[i].textContent);
+            let p = parseInt(pArray[i].textContent.split(' ')[1]);
             amtArray[i].textContent = q * p;
+
             let total = 0;
 
             amtArray.forEach(amt => {
@@ -51,7 +52,7 @@ async function loadProducts(sum) {
     let response = await fetch('/api/products');
     let products = await response.json();
 
-    console.log(products);
+    // console.log(products);
     let productsList = select('#list-products');
     let quantityArray = [];
     let priceArray = [];
@@ -77,7 +78,7 @@ async function loadProducts(sum) {
         itemNumber.textContent = product[0];
         let price = document.createElement('div');
         price.className = 'price';
-        price.textContent = product[1];
+        price.textContent = `$ ${product[1]}`;
         priceArray.push(price);
 
         let quantityDiv = document.createElement('div');
@@ -135,7 +136,7 @@ function loadOrder(productsList) {
         let amountList = productsList.querySelectorAll('.amount');
         for (let i = 0; i < data.products.length; i++) {
             quantitiesList[i].value = data.quantities[i];
-            amountList[i].textContent = parseInt(priceList[i].textContent) * data.quantities[i];
+            amountList[i].textContent = parseInt(priceList[i].textContent.split(' ')[1]) * data.quantities[i];
         }
         select('#total').textContent = `總計 $${data.total}`;
     });
@@ -149,7 +150,6 @@ select('#back').href = `${backPath}`;
 //load data
 let sum = 0;
 loadData();
-
 
 
 
@@ -189,7 +189,7 @@ orderForm.addEventListener('submit', (event) => {
         comment: select('#order-form textarea').value,
 
     };
-    console.log(postOrder);
+    // console.log(postOrder);
     let orderNum = window.location.pathname.split('/')[4];
 
     fetch(`/api/order/${orderNum}`, {
@@ -199,10 +199,10 @@ orderForm.addEventListener('submit', (event) => {
             'content-type': 'application/json'
         }
     }).then(res => res.json()).then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success) {
             alert('修改成功');
-            window.location.reload();
+            window.location = backPath;
         } else {
             alert(result.message);
         }

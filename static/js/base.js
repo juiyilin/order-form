@@ -38,7 +38,7 @@ let nowUser;
 fetch('/api/status').then(res => res.json())
     .then(user => {
         nowUser = user;
-        console.log('status', user);
+        // console.log('status', user);
         let loginCompany = select('#login-company');
         let welcome = select('#welcome');
         let manageAccount = select('#manage-accounts');
@@ -46,7 +46,7 @@ fetch('/api/status').then(res => res.json())
         let manageShow = select('#manage-shows');
         let log = select('#log');
         if (Object.keys(user).length === 0) {
-            console.log(window.location);
+            // console.log(window.location);
             loginCompany.textContent = 'WELCOME';
             if (window.location.pathname !== '/') {
                 window.location = '/';
@@ -54,9 +54,12 @@ fetch('/api/status').then(res => res.json())
         } else {
             loginCompany.textContent = '';
             if (user.company.logo !== '') {
+                let backMenu = document.createElement('a');
+                backMenu.href = '/';
                 let logo = document.createElement('img');
                 logo.src = user.company.logo;
-                loginCompany.appendChild(logo);
+                backMenu.appendChild(logo);
+                loginCompany.appendChild(backMenu);
             } else {
                 loginCompany.textContent = user.company.company;
             }

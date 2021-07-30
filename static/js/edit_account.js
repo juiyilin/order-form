@@ -1,10 +1,10 @@
 let before;
 let urlParams = new URLSearchParams(window.location.search);
 name = urlParams.get('name');
-console.log(window.location);
+// console.log(window.location);
 fetch(`/api/content?name=${name}`).then(res => res.json())
     .then(user => {
-        console.log(user);
+        // console.log(user);
         if (!Array.isArray(user)) {
             alert(user.message);
             window.location = `${window.location.pathname}?name=${nowUser.user.name}`;

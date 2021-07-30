@@ -43,7 +43,6 @@ def account(company):
 	name=request.args.get('name')
 	print('query name',name)
 	if name==None:
-		print('***',session)
 		return render_template('account.html')
 	else:
 		return render_template('edit_account.html')
@@ -111,5 +110,5 @@ def server_error(error):
 	return jsonify(result),500
 
 if __name__ == '__main__':
-    app.run(host='localhost',debug=True)
+    app.run(host='0.0.0.0',debug=True)
  

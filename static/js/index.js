@@ -18,7 +18,7 @@ forms.forEach(form => {
                     'content-type': 'application/json'
                 },
             }).then(res => res.json()).then(result => {
-                console.log(result);
+                // console.log(result);
                 if (result.user) {
                     window.location = `/${result.user.company}/menu`;
 
@@ -55,7 +55,7 @@ forms.forEach(form => {
                     body: formData,
                 }).then(res => res.json())
                 .then(result => {
-                    console.log(result);
+                    // console.log(result);
                     if (result.success) {
                         window.location = `/${formData.get('company')}/menu`;
                     } else {

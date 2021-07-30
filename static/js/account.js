@@ -4,7 +4,7 @@ window.addEventListener('load', () => {
     //load accounts
     fetch('/api/content').then(res => res.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
             if (nowUser.user.auth === '一般') {
                 // console.log(nowUser)
                 // alert(data.message)
@@ -98,7 +98,7 @@ let values = createAccount.querySelectorAll('input');
 let selectTag = createAccount.querySelector('select');
 selectTag.addEventListener('change', () => {
 
-    console.log(selectTag.value);
+    // console.log(selectTag.value);
     let sub = createAccount.querySelector('sub');
     if (selectTag.value === '高') {
         sub.textContent = '可管理所有帳號資料';
@@ -168,7 +168,7 @@ companyInfo.addEventListener('submit', (event) => {
             body: formData,
         }).then(res => res.json())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             if (result.success) {
                 alert('修改成功');
                 window.location.reload();
@@ -211,7 +211,7 @@ function deleteButton() {
                         }
                     }).then(res => res.json())
                     .then(result => {
-                        console.log(result);
+                        // console.log(result);
                         if (result.success) {
                             alert('帳號已刪除');
                             window.location.reload();

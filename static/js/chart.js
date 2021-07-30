@@ -57,7 +57,7 @@ function pieChart(pqarray) {
 function barChart(pqarray) {
     let barArray = [
         ['品項', '數量']
-    ]
+    ];
     for (let i in pqarray) {
         barArray.push([i, pqarray[i]]);
     }
@@ -90,7 +90,7 @@ function barChart(pqarray) {
 
 let sumPQ = loadData();
 sumPQ.then(pq => {
-    console.log(pq)
+    // console.log(pq);
 
     google.charts.load('current', {
         'packages': ['corechart']
@@ -106,13 +106,5 @@ sumPQ.then(pq => {
         barChart(pq);
 
 
-    })
-})
-// data.then(d => {
-//     console.log(123)
-//     console.log(d)
-// })
-// data.then(d => {
-//     console.log(456)
-//     console.log(d)
-// })
+    });
+});

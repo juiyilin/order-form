@@ -80,14 +80,31 @@ def company():
     img=request.files.get('logo')
     img_link=''
     if img!=None:
-        img_link=save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain)
+        s3 = boto3.client(
+            "s3",
+            aws_access_key_id=AWSAccessKeyId,
+            aws_secret_access_key=AWSSecretKey
+        )
+        img_link=save_to_s3(s3,img,company,cdn_domain)
+        del_link=session.get('company').get('logo')
+        if del_link!=None:
+            print(del_link.split('net/')[1])
+            del_link_id=del_link.split('net/')[1]
+            delete_from_s3(s3,bucket_name,del_link_id)
     try:
         conn,cursor=connect_db(db)
         cursor.execute('update companys set logo_link=%s where id=%s',(img_link,company_id))
     except:
         abort(500,'修改logo時發生不明錯誤')
     conn.commit()
-    session['company']['logo']=img_link
+    close_db(conn,cursor)
+    session.pop('company')
+    session['company']={
+        'id':company_id,
+        'company':company,
+        'logo':img_link
+    }
+    
     return jsonify({'success':True}),200
 
     
@@ -376,12 +393,8 @@ def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,e
     else:
         abort(400,error_msg)
 
-def save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain):
-    s3 = boto3.client(
-        "s3",
-        aws_access_key_id=AWSAccessKeyId,
-        aws_secret_access_key=AWSSecretKey
-    )
+def save_to_s3(s3,img,company,cdn_domain):
+    
     img_name = secure_filename(img.filename)
     s3.upload_fileobj(
         img,
@@ -394,3 +407,11 @@ def save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain):
     )
     img_link=f'{cdn_domain}/{company}/{img.filename}'
     return img_link
+
+        
+def delete_from_s3(s3,bucket_name,del_link_id):
+    response = s3.delete_object(
+        Bucket=bucket_name,
+        Key=del_link_id
+    )
+    print(response)

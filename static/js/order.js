@@ -8,8 +8,11 @@ function caculate(qArray, pArray, amtArray, ttl) {
             } else {
                 q = parseInt(qArray[i].value);
             }
-            let p = parseInt(pArray[i].textContent);
+
+            let p = parseInt(pArray[i].textContent.split(' ')[1]);
             amtArray[i].textContent = q * p;
+            // console.log(pArray[i].textContent.split(' ')[1]);
+
             let total = 0;
 
             amtArray.forEach(amt => {
@@ -41,77 +44,78 @@ function searchPostCode(search, address) {
 
 }
 
-// async function loadData() {
-//     let productsList = await loadProducts(sum);
-
-// }
 
 async function loadProducts(sum) {
     let response = await fetch('/api/products');
     let products = await response.json();
 
-    console.log(products);
+    // console.log(products);
     let productsList = select('#list-products');
-    let quantityArray = [];
-    let priceArray = [];
-    let amountArray = [];
+    if (products.length == 0) {
+        let row = document.createElement('div');
+        row.innerHTML = '沒有產品資料，至<a href="../products">產品頁</a>新增';
+        productsList.appendChild(row);
+    } else {
+        let quantityArray = [];
+        let priceArray = [];
+        let amountArray = [];
 
-    let titles = ['名稱', '單價', '數量', '金額'];
-    let row = document.createElement('div');
-    row.className = 'row';
-    titles.forEach(title => {
-        let col = document.createElement('div');
-        col.className = 'col';
-        col.textContent = title;
-        row.appendChild(col);
-    });
-
-    productsList.appendChild(row);
-
-    products.forEach(product => {
+        let titles = ['名稱', '單價', '數量', '金額'];
         let row = document.createElement('div');
         row.className = 'row';
-        let itemNumber = document.createElement('div');
-        itemNumber.className = 'item-number';
-        itemNumber.textContent = product[0];
-        let price = document.createElement('div');
-        price.className = 'price';
-        priceArray.push(price);
-        price.textContent = `$ ${product[1]}`;
+        titles.forEach(title => {
+            let col = document.createElement('div');
+            col.className = 'col';
+            col.textContent = title;
+            row.appendChild(col);
+        });
 
-        let quantityDiv = document.createElement('div');
-        let quantity = document.createElement('input');
-        quantity.type = 'number';
-        quantity.className = 'quantity';
-        quantity.value = 0;
-        quantity.min = 0;
-        quantityDiv.appendChild(quantity);
-        quantityArray.push(quantity);
-
-        let amount = document.createElement('div');
-        amount.className = 'amount';
-        amount.textContent = 0;
-        amountArray.push(amount);
-
-        itemNumber.appendChild(quantityDiv);
-        row.appendChild(itemNumber);
-        row.appendChild(price);
-        row.appendChild(quantityDiv);
-        row.appendChild(amount);
         productsList.appendChild(row);
-    });
-    row = document.createElement('row');
-    row.className = 'row';
-    let total = document.createElement('div');
-    total.id = 'total';
-    total.textContent = '總計 $0';
-    row.appendChild(total);
-    caculate(quantityArray, priceArray, amountArray, total);
+
+        products.forEach(product => {
+            let row = document.createElement('div');
+            row.className = 'row';
+            let itemNumber = document.createElement('div');
+            itemNumber.className = 'item-number';
+            itemNumber.textContent = product[0];
+            let price = document.createElement('div');
+            price.className = 'price';
+            priceArray.push(price);
+            price.textContent = `$ ${product[1]}`;
+
+            let quantityDiv = document.createElement('div');
+            let quantity = document.createElement('input');
+            quantity.type = 'number';
+            quantity.className = 'quantity';
+            quantity.value = 0;
+            quantity.min = 0;
+            quantityDiv.appendChild(quantity);
+            quantityArray.push(quantity);
+
+            let amount = document.createElement('div');
+            amount.className = 'amount';
+            amount.textContent = 0;
+            amountArray.push(amount);
+
+            itemNumber.appendChild(quantityDiv);
+            row.appendChild(itemNumber);
+            row.appendChild(price);
+            row.appendChild(quantityDiv);
+            row.appendChild(amount);
+            productsList.appendChild(row);
+        });
+        row = document.createElement('row');
+        row.className = 'row';
+        let total = document.createElement('div');
+        total.id = 'total';
+        total.textContent = '總計 $0';
+        row.appendChild(total);
+        caculate(quantityArray, priceArray, amountArray, total);
 
 
-    productsList.appendChild(row);
-    return productsList;
-
+        productsList.appendChild(row);
+        return productsList;
+    }
 }
 
 
@@ -121,8 +125,7 @@ showName.forEach(showname => {
     // console.log(window.location.pathname.split('/'))
     showname.textContent = decodeURIComponent(pathname.split('/')[3]);
 });
-let chart = select('#chart');
-chart.href = `${pathname}/charts`;
+
 
 //load data
 let sum = 0;
@@ -131,7 +134,7 @@ loadProducts(sum);
 // load orders
 window.addEventListener('load', () => {
     fetch('/api/orders').then(res => res.json()).then(data => {
-            console.log(data);
+            // console.log(data);
             let listOrders = select('#list-orders');
             if (data.length === 0) {
                 let row = document.createElement('div');
@@ -140,6 +143,12 @@ window.addEventListener('load', () => {
                 row.id = 'no-data';
                 listOrders.appendChild(row);
             } else {
+                let chart = select('#orders-title p');
+                let chartLink = document.createElement('a');
+                chartLink.id = 'chart';
+                chartLink.href = `${pathname}/charts`;
+                chartLink.innerHTML = '<img src="/static/img/chart.png" alt="">圖表';
+                chart.appendChild(chartLink);
                 for (let i = 0; i < data.length; i++) {
                     let row = document.createElement('div');
                     row.className = 'row';
@@ -240,7 +249,7 @@ orderForm.addEventListener('submit', (event) => {
         comment: select('#order-form textarea').value,
 
     };
-    console.log(postOrder);
+    // console.log(postOrder);
     fetch('/api/orders', {
         method: "POST",
         body: JSON.stringify(postOrder),
@@ -248,7 +257,7 @@ orderForm.addEventListener('submit', (event) => {
             'content-type': 'application/json'
         }
     }).then(res => res.json()).then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success) {
             window.location.reload();
         }

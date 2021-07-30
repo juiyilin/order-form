@@ -82,7 +82,7 @@ function deleteBtn(btn) {
             input.checked = true;
 
             if (input.checked) {
-                console.log(input.value);
+                // console.log(input.value);
                 fetch('/api/shows', {
                         method: 'DELETE',
                         body: JSON.stringify({
@@ -93,7 +93,7 @@ function deleteBtn(btn) {
                         }
                     }).then(res => res.json())
                     .then(result => {
-                        console.log(result);
+                        // console.log(result);
                         if (result.success) {
                             window.location.reload();
                         } else {
@@ -131,7 +131,7 @@ create.addEventListener('submit', (event) => {
             start: start,
             end: end,
         };
-        console.log(showData);
+        // console.log(showData);
 
         fetch('/api/shows', {
                 method: 'POST',
@@ -144,7 +144,7 @@ create.addEventListener('submit', (event) => {
                 if (!result.success) {
                     alert(result.message);
                 } else {
-                    console.log(result);
+                    // console.log(result);
                     window.location = `/${nowUser.company.company}/shows/${showData.showName}`;
                 }
             });
@@ -156,7 +156,7 @@ create.addEventListener('submit', (event) => {
 window.addEventListener('load', () => {
     fetch('/api/shows').then(res => res.json())
         .then(result => {
-            console.log(result);
+            // console.log(result);
             let domestic = select('#domestic');
             let foreign = select('#foreign');
             listShow(domestic, result.domestic);
@@ -173,7 +173,7 @@ choose.addEventListener('submit', (event) => {
     let inputs = choose.querySelectorAll('input');
     inputs.forEach(input => {
         if (input.checked) {
-            console.log(input.value);
+            // console.log(input.value);
             fetch(`/api/show/${input.value}`).then(res => res.json()).then(result => {
                 if (result.success) {
                     window.location = `/${nowUser.company.company}/shows/${input.value}`;
