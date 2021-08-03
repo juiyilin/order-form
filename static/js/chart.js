@@ -32,7 +32,7 @@ function pieChart(pqarray) {
     for (let i in pqarray) {
         pieArray.push([i, pqarray[i]]);
     }
-    console.log(pieArray);
+    // console.log(pieArray);
     let data = google.visualization.arrayToDataTable(pieArray);
 
     let options = {

@@ -4,7 +4,7 @@ import config
 
 
 db=MySQLConnectionPool(
-    host=config.host,
+    # host=config.host,
     user=config.user, 
     password=config.password, 
     database='show_record_system',
@@ -12,6 +12,7 @@ db=MySQLConnectionPool(
     pool_size=15,
     pool_reset_session=True
 )
+
 def connect_db(db):
     conn=db.get_connection()
     cursor=conn.cursor()

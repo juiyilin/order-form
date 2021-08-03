@@ -89,7 +89,6 @@ img {
 
 #list-orders .row {
     height: fit-content;
-    /* justify-content: space-around; */
     align-items: center;
     padding: 10px 0;
 }
@@ -121,6 +120,7 @@ img {
     margin-top: 0;
 } */
 .more,
+#dataframe,
 #chart {
     text-decoration: none;
     border-radius: 3px;
@@ -128,18 +128,19 @@ img {
     color: #000000;
 }
 
+#dataframe,
 #chart {
     border: 2px solid #66aabb;
-
+    margin: 0 5px;
 }
 
 .more {
     border: 1px solid #66aabb;
     font-size: 10px;
-
 }
 
 .more:hover,
+#dataframe:hover,
 #chart:hover {
     background-color: #448899;
     color: #ffffff;

@@ -38,7 +38,7 @@ let nowUser;
 fetch('/api/status').then(res => res.json())
     .then(user => {
         nowUser = user;
-        // console.log('status', user);
+        console.log('status', user);
         let loginCompany = select('#login-company');
         let welcome = select('#welcome');
         let manageAccount = select('#manage-accounts');
@@ -53,15 +53,15 @@ fetch('/api/status').then(res => res.json())
             }
         } else {
             loginCompany.textContent = '';
-            if (user.company.logo !== '') {
+            if (user.company.logo == '' || user.company.logo == null) {
+                loginCompany.textContent = user.company.company;
+            } else {
                 let backMenu = document.createElement('a');
                 backMenu.href = '/';
                 let logo = document.createElement('img');
                 logo.src = user.company.logo;
                 backMenu.appendChild(logo);
                 loginCompany.appendChild(backMenu);
-            } else {
-                loginCompany.textContent = user.company.company;
             }
             welcome.textContent = `Hello, ${user.user.name}`;
             let menu = [manageAccount, manageProduct, manageShow];

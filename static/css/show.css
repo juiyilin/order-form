@@ -13,6 +13,10 @@ input[type=radio]:checked {
     box-shadow: 0 0 3px 0px;
 }
 
+input[type=date] {
+    background-color: #ffffff;
+}
+
 button:hover {
     background-color: #448899;
     color: #ffffff;

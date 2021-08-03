@@ -1,12 +1,40 @@
+#content {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0 auto;
+}
+
+#content>h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+}
+
 form {
     border: #e8e8e8 1px solid;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    width: 500px;
-    margin: 20px auto;
+    width: 50%;
+    margin: 20px 0;
     padding: 20px;
+}
 
+@media(max-width:750px) {
+    #content {
+        display: block;
+    }
+
+    #content>h1 {
+        text-align: center;
+        width: 100%;
+    }
+
+    form {
+        width: 80%;
+        margin: 0 auto;
+    }
 }
 
 @media(max-width:500px) {
@@ -17,7 +45,6 @@ form {
 
 form p {
     line-height: 20px;
-    /* border: olive 1px solid; */
     margin-bottom: 2px;
 }
 

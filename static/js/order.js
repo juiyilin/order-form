@@ -143,12 +143,18 @@ window.addEventListener('load', () => {
                 row.id = 'no-data';
                 listOrders.appendChild(row);
             } else {
-                let chart = select('#orders-title p');
+                let ordersTitle = select('#orders-title p');
+                let dataframe = document.createElement('a');
+                dataframe.id = 'dataframe';
+                dataframe.href = '/dataframe';
+                dataframe.innerHTML = '<img src="/static/img/download.png" alt="">匯出';
+                ordersTitle.appendChild(dataframe);
+
                 let chartLink = document.createElement('a');
                 chartLink.id = 'chart';
                 chartLink.href = `${pathname}/charts`;
                 chartLink.innerHTML = '<img src="/static/img/chart.png" alt="">圖表';
-                chart.appendChild(chartLink);
+                ordersTitle.appendChild(chartLink);
                 for (let i = 0; i < data.length; i++) {
                     let row = document.createElement('div');
                     row.className = 'row';
@@ -223,13 +229,13 @@ let orderForm = document.querySelector('#order-form');
 orderForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    let products = orderForm.querySelectorAll('#products-list .item-number');
+    let products = orderForm.querySelectorAll('#list-products .item-number');
     let productsArr = [];
     products.forEach(product => {
         productsArr.push(product.textContent);
     });
 
-    let quantities = orderForm.querySelectorAll('#products-list .quantity');
+    let quantities = orderForm.querySelectorAll('#list-products .quantity');
     let quantityArr = [];
     quantities.forEach(quantity => {
         quantityArr.push(parseInt(quantity.value));

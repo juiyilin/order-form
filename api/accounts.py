@@ -87,7 +87,8 @@ def company():
         )
         img_link=save_to_s3(s3,img,company,cdn_domain)
         del_link=session.get('company').get('logo')
-        if del_link!=None:
+        print(del_link)
+        if (del_link!='') and (del_link!=None):
             print(del_link.split('net/')[1])
             del_link_id=del_link.split('net/')[1]
             delete_from_s3(s3,bucket_name,del_link_id)

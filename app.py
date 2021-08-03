@@ -6,6 +6,7 @@ from api.accounts import accounts
 from api.products import products
 from api.shows import shows
 from api.orders import orders
+from api.export import export
 
 
 app = Flask(__name__)
@@ -13,6 +14,7 @@ app.register_blueprint(accounts, url_prefix='/api')
 app.register_blueprint(products, url_prefix='/api')
 app.register_blueprint(shows, url_prefix='/api')
 app.register_blueprint(orders, url_prefix='/api')
+app.register_blueprint(export)
 
 app.config['JSON_AS_ASCII']=False
 app.config['SEND_FILE_MAX_AGE_DEFAULT']=0

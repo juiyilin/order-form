@@ -62,13 +62,13 @@ window.addEventListener('load', () => {
             //load company info
             let companyInfo = select('#company-info');
             companyInfo.querySelector('span').textContent = nowUser.company.company;
-            if (nowUser.company.logo !== '') {
+            if (nowUser.company.logo == '' || nowUser.company.logo == null) {
+                companyInfo.querySelector('svg').style.display = 'inline';
+                companyInfo.querySelector('sub').style.display = 'inline';
+            } else {
                 let img = companyInfo.querySelector('img');
                 img.style.display = 'block';
                 img.src = nowUser.company.logo;
-            } else {
-                companyInfo.querySelector('svg').style.display = 'inline';
-                companyInfo.querySelector('sub').style.display = 'inline';
             }
         });
 });

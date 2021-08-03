@@ -56,7 +56,7 @@ def show():
                 close_db(conn,cursor)
                 show={
                     'id':show_id,
-                    'show_name':show_name,
+                    'name':show_name,
                     'region':region,
                     'start':start,
                     'end':end

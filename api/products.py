@@ -5,7 +5,7 @@ from create_db_table import db, connect_db, close_db
 products = Blueprint('products', __name__)
 
 @products.route('/products', methods = ['GET', 'POST', 'DELETE'])
-def category():
+def product():
     if 'company' not in session:
         abort(403)
     else:
