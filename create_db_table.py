@@ -9,7 +9,7 @@ db=MySQLConnectionPool(
     password=config.password, 
     database='show_record_system',
     pool_name='connection_pool',
-    pool_size=15,
+    pool_size=5,
     pool_reset_session=True
 )
 
