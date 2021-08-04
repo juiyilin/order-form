@@ -10,11 +10,9 @@ def product():
         abort(403)
     else:
         conn, cursor = connect_db(db)
-        print('是否連線',conn.is_connected())
         company_id = session['company']['id']
         if request.method == 'GET':
             print('get products')
-            print('是否連線',conn.is_connected())
 
             cursor.execute('select item_number,price from products where company_id=%s order by item_number', (company_id, ))
             get_all = cursor.fetchall()
@@ -34,17 +32,20 @@ def product():
                     select item_number from products 
                     where company_id = %s and item_number = %s ''',(company_id,item_number))
             except:
+                close_db(conn, cursor)
                 abort(500) 
             get_one = cursor.fetchone() 
             if get_one == None:
                 try:
                     cursor.execute('insert into products (item_number,company_id,price) value(%s,%s,%s)', (item_number, company_id, price)) 
                 except:
+                    close_db(conn, cursor)
                     abort(500, '新增產品發生錯誤') 
                 conn.commit() 
                 close_db(conn, cursor) 
                 return jsonify({'success': True}), 200
             else :
+                close_db(conn, cursor)
                 abort(400, '此產品名稱已存在')
         if request.method=='DELETE':
             print('delete products')
@@ -54,6 +55,7 @@ def product():
             try:
                 cursor.execute('delete from products where item_number=%s and price=%s and company_id=%s',(item_number,price,company_id))
             except:
+                close_db(conn, cursor)
                 abort(500,'刪除產品時發生錯誤')
             conn.commit()
             close_db(conn,cursor)

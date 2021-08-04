@@ -19,6 +19,7 @@ def show():
                 where company_id=%s order by start desc
                 ''',(company_id,))
             except:
+                close_db(conn, cursor)
                 abort(500)
             get_all=cursor.fetchall()
             close_db(conn,cursor)
@@ -49,6 +50,7 @@ def show():
                 try:
                     cursor.execute('insert into shows (company_id, show_name, region, start, end) values(%s,%s,%s,%s,%s)',(company_id,show_name,region,start,end))
                 except:
+                    close_db(conn,cursor)
                     abort(500,'新增展覽時遇到不明錯誤')
                 conn.commit()
                 cursor.execute('select id from shows where show_name=%s',(show_name,))
@@ -65,6 +67,7 @@ def show():
                 session['show']=show
                 return jsonify({'success':True}),200
             else:
+                close_db(conn,cursor)
                 abort(400,'此展覽名稱已存在')
 
         if request.method=='DELETE':
@@ -75,6 +78,7 @@ def show():
             try:
                 cursor.execute('delete from shows where company_id=%s and show_name=%s',(company_id,show_name))
             except:
+                close_db(conn,cursor)
                 abort(500,'刪除展覽時遇到不明錯誤')
             conn.commit()
             close_db(conn,cursor)
@@ -90,6 +94,7 @@ def show_id(show_name):
         try:
             cursor.execute('select id, show_name, region,DATE_FORMAT(start,"%Y/%m/%d"),DATE_FORMAT(end,"%Y/%m/%d") from shows where company_id=%s and show_name=%s',(company_id,show_name))
         except:
+            close_db(conn,cursor)
             abort(500)
         get_one=cursor.fetchone()
         close_db(conn,cursor)

@@ -18,6 +18,7 @@ def order():
             where orders.company_id=%s and orders.show_id=%s
             ''',(company_id,show_id))
         except:
+            close_db(conn, cursor)
             abort(500,'資料庫錯誤')
         get_all=cursor.fetchall()
         close_db(conn,cursor)
@@ -49,7 +50,8 @@ def order():
                 insert into orders (company_id, submitter_id, show_id, customer,products, quantities, total, phone, email, address, tax_id, comment) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             ''',(company_id,submitter_id,show_id,customer,products,quantities,total,phone,email,address,tax_id,comment))
         except:
-            abort(500)
+            close_db(conn, cursor)
+            abort(500,'新增資訊時發生錯誤')
         conn.commit()
         close_db(conn,cursor)
         return jsonify({'success':True}),200
@@ -69,6 +71,7 @@ def order_id(orderNum):
             where orders.company_id=%s and orders.show_id=%s limit %s,1
             ''',(company_id,show_id,order_num))
         except:
+            close_db(conn, cursor)
             abort(500)
 
         get_one=cursor.fetchone()
@@ -99,11 +102,13 @@ def order_id(orderNum):
             where orders.company_id=%s and orders.show_id=%s limit %s,1
             ''',(company_id,show_id,order_num))
         except:
+            close_db(conn, cursor)
             abort(500)
         get_id=cursor.fetchone()[0]
         try:
             cursor.execute('''update orders set customer=%s, products=%s,quantities=%s, total=%s, phone=%s, email=%s, address=%s, tax_id=%s, comment=%s where id=%s''',(customer,products,quantities,total,phone,email,address,tax_id,comment,get_id))
         except:
+            close_db(conn, cursor)
             abort(500,'修改時遇到錯誤')
         conn.commit()
         close_db(conn,cursor)

@@ -16,9 +16,6 @@ def status():
     if request.method=='GET':
         print('get 取得session')
         print(session)
-        # if 'user' not in session or 'company' not in session:
-        #     session['user']=None 
-        #     session['company']=None 
         return jsonify(dict(session)),200
 
     if request.method=='PATCH':
@@ -39,6 +36,7 @@ def status():
             accounts.id, accounts.name, accounts.email, accounts.authority from companys 
             join accounts on companys.id=accounts.company_id where companys.company = %s and accounts.email = %s and accounts.password = %s''',(company,email,password))
         except:
+            close_db(conn,cursor)
             abort(500,'伺服器發生錯誤')
         else:
             get_first=cursor.fetchone()
@@ -98,6 +96,7 @@ def company():
         conn,cursor=connect_db(db)
         cursor.execute('update companys set logo_link=%s where id=%s',(img_link,company_id))
     except:
+        close_db(conn,cursor)
         abort(500,'修改logo時發生不明錯誤')
     conn.commit()
     close_db(conn,cursor)
@@ -132,6 +131,7 @@ def content():
                 cursor.execute('select id, name, email, authority from accounts where company_id=%s and name = %s',(company_id,name))
                 get_one=cursor.fetchone()
                 if get_one==None:
+                    close_db(conn,cursor)
                     abort(400,'無此資料')
                 close_db(conn,cursor)
                 print(get_one)
@@ -145,6 +145,7 @@ def content():
 
                     return jsonify(get_all),200
                 else:
+                    close_db(conn,cursor)
                     abort(403,'沒有權限')
 
     if request.method=='POST':
@@ -164,6 +165,7 @@ def content():
             #驗證email
             if valid_email(email)==None:
                 cursor.execute('delete from companys where company=%s',(company,))
+                close_db(conn,cursor)
                 abort(400,'信箱格式錯誤')
             #hash password
             password=to_hash(request.form['password'])
@@ -171,6 +173,7 @@ def content():
             try: 
                 cursor.execute('select * from companys where company = %s',(company,))
             except:
+                close_db(conn,cursor)
                 abort(500,'伺服器錯誤')
             else:
                 get_company=cursor.fetchone()
@@ -182,6 +185,7 @@ def content():
                         # insert company
                         cursor.execute('insert into companys (company,logo_link) values(%s,%s)',(company,img_link))
                     except:
+                        close_db(conn,cursor)
                         abort(500,'新增公司時發生不明錯誤')
                     
                     else:
@@ -206,6 +210,7 @@ def content():
                             'auth':authority
                         }
                 else:
+                    close_db(conn,cursor)
                     abort(400,'新增失敗，公司名稱 已被使用')
         else:
             print('post 新增其他使用者帳號')
@@ -215,6 +220,7 @@ def content():
             #check email
             email=request.json['email']
             if valid_email(email)==None:
+                close_db(conn,cursor)
                 abort(400,'信箱格式錯誤')
             #hash password
             password=to_hash(request.json['password'])
@@ -226,6 +232,7 @@ def content():
             if get_one==None:
                 insert_account(cursor,conn,company_id,name,email,password,authority)
             else:
+                close_db(conn,cursor)
                 abort(400,'新增失敗，名稱或信箱 已被使用')
             
 
@@ -241,6 +248,7 @@ def content():
             old_name=request.json['oldName']
             old_email=request.json['oldEmail']
             if valid_email(old_email)==None:
+                close_db(conn,cursor)
                 abort(400,'信箱格式錯誤')
             company_id=session['company']['id']
             user_id=request.json['userId']
@@ -253,6 +261,7 @@ def content():
                 select * from accounts where id=%s and password = %s
                 ''',(user_id,old_password))
             except:
+                close_db(conn,cursor)
                 abort(500)
             else:
                 get_account=cursor.fetchone()
@@ -260,6 +269,7 @@ def content():
                 new_name=request.json['newName']
                 new_email=request.json['newEail']
                 if valid_email(new_email)==None:
+                    close_db(conn,cursor)
                     abort(400,'信箱格式錯誤')
                 new_password=to_hash(request.json['newPassword'])
                 
@@ -271,6 +281,7 @@ def content():
                         try:
                             cursor.execute('update accounts set password=%s where id=%s',(new_password,user_id))
                         except:
+                            close_db(conn,cursor)
                             abort(500,'修改帳號資料時發生不明錯誤')
                         conn.commit()
                         close_db(conn,cursor)
@@ -287,6 +298,7 @@ def content():
                                 where id=%s
                                 ''',(new_name,new_email,new_password,user_id))
                             except:
+                                close_db(conn,cursor)
                                 abort(500,'修改帳號資料時發生不明錯誤')
                             conn.commit()
                             close_db(conn,cursor)
@@ -303,6 +315,7 @@ def content():
                                 session['user']=user
                                 print('new',session)
                         else:
+                            close_db(conn,cursor)
                             abort(400,'修改失敗，Email 已被使用')
 
                     #若新舊name不同、新舊email相同
@@ -332,6 +345,7 @@ def content():
         try:
             cursor.execute('delete from accounts where name = %s and email = %s',(name,email))
         except:
+            close_db(conn,cursor)
             abort(500,'刪除帳號時發生不明錯誤')
         else:
             conn.commit()
@@ -364,6 +378,7 @@ def insert_account(cursor,conn,company_id,name,email,password,authority):
         insert into accounts (company_id, name, email, password, authority) values(%s,%s,%s,%s,%s)
         ''',(company_id,name,email,password,authority))
     except:
+        close_db(conn,cursor)
         abort(500,'新增帳號時發生不明錯誤')
     conn.commit()
     user_id=cursor.lastrowid
@@ -378,6 +393,7 @@ def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,e
             where id=%s
             ''',(new_name,new_email,new_password,user_id))
         except:
+            close_db(conn,cursor)
             abort(500,'修改帳號資料時發生不明錯誤')
         conn.commit()
         close_db(conn,cursor)
@@ -394,6 +410,7 @@ def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,e
             session['user']=user
             print('new',session)
     else:
+        close_db(conn,cursor)
         abort(400,error_msg)
 
 def save_to_s3(s3,img,company,cdn_domain):
