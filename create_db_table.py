@@ -8,8 +8,7 @@ db=MySQLConnectionPool(
     user=config.user, 
     password=config.password, 
     database='show_record_system',
-    pool_name='connection_pool',
-    pool_size=5,
+    pool_size=1,
     pool_reset_session=True
 )
 

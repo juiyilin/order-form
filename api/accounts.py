@@ -30,6 +30,8 @@ def status():
             abort(400,'密碼格式錯誤')
         password=to_hash(request.json['password'])
         conn,cursor=connect_db(db)
+        print('是否連線',conn.is_connected())
+
         print(*[company,email,password])
         try:
             cursor.execute('''

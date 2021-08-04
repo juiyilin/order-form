@@ -10,12 +10,16 @@ def product():
         abort(403)
     else:
         conn, cursor = connect_db(db)
+        print('是否連線',conn.is_connected())
         company_id = session['company']['id']
         if request.method == 'GET':
             print('get products')
+            print('是否連線',conn.is_connected())
+
             cursor.execute('select item_number,price from products where company_id=%s order by item_number', (company_id, ))
             get_all = cursor.fetchall()
             close_db(conn, cursor)
+
             return jsonify(get_all), 200
 
         if request.method == 'POST':
