@@ -180,7 +180,12 @@ def content():
                 if get_company == None:
                     img_link=''
                     if img!=None:
-                        img_link=save_to_s3(AWSAccessKeyId,AWSSecretKey,img,company,cdn_domain)
+                        s3 = boto3.client(
+                            "s3",
+                            aws_access_key_id=AWSAccessKeyId,
+                            aws_secret_access_key=AWSSecretKey
+                        )
+                        img_link=save_to_s3(s3,img,company,cdn_domain)
                     try:
                         # insert company
                         cursor.execute('insert into companys (company,logo_link) values(%s,%s)',(company,img_link))
@@ -190,7 +195,6 @@ def content():
                     
                     else:
                         conn.commit()
-                        
                         company_id=cursor.lastrowid
                         #company資料加入session
                         session['company']={
@@ -414,7 +418,6 @@ def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,e
         abort(400,error_msg)
 
 def save_to_s3(s3,img,company,cdn_domain):
-    
     img_name = secure_filename(img.filename)
     s3.upload_fileobj(
         img,
@@ -425,13 +428,16 @@ def save_to_s3(s3,img,company,cdn_domain):
             "ContentType": img.content_type
         }
     )
+    pattern=r'\w+( \(\d+\))*(\.\w{3})$'
+    result=re.match(pattern,img.filename)
+    if result: #if not match return None
+        img.filename=img.filename.replace(' (','_').replace(')','')
     img_link=f'{cdn_domain}/{company}/{img.filename}'
     return img_link
 
         
 def delete_from_s3(s3,bucket_name,del_link_id):
-    response = s3.delete_object(
+    s3.delete_object(
         Bucket=bucket_name,
         Key=del_link_id
     )
-    print(response)
