@@ -60,7 +60,7 @@ forms.forEach(form => {
                         window.location = `/${formData.get('company')}/menu`;
                     } else {
                         alert(result.message);
-                        processing.style.display = 'none';
+                        processing.textContent = '註冊完成';
                     }
                 });
         }
