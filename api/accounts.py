@@ -419,26 +419,16 @@ def update_account(conn,cursor,get_one,new_name,new_email,new_password,user_id,e
 
 def save_to_s3(s3,img,company,cdn_domain):
     img_name = secure_filename(img.filename)
-    # s3.upload_fileobj(
-    #     img,
-    #     bucket_name,
-    #     company+'/'+img_name,
-    #     ExtraArgs={
-    #         "ACL": "public-read", #Access control list
-    #         "ContentType": img.content_type
-    #     }
-    # )
-    s3.put_object(
-        ACL='public-read',
-        Bucket=bucket_name,
-        Key=company+'/'+img_name,
-        Body=img
+    s3.upload_fileobj(
+        img,
+        bucket_name,
+        company+'/'+img_name,
+        ExtraArgs={
+            "ACL": "public-read", #Access control list
+            "ContentType": img.content_type
+        }
     )
-    pattern=r'\w+( \(\d+\))*(\.\w{3})$'
-    result=re.match(pattern,img.filename)
-    if result: #if not match return None
-        img.filename=img.filename.replace(' (','_').replace(')','')
-    img_link=f'{cdn_domain}/{company}/{img.filename}'
+    img_link=f'{cdn_domain}/{company}/{img_name}'
     return img_link
 
         
