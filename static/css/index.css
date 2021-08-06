@@ -4,9 +4,9 @@
     margin: 0 auto;
 }
 
-#content>h1 {
+#content>#summary {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
     width: 45%;
 }
@@ -26,8 +26,8 @@ form {
         display: block;
     }
 
-    #content>h1 {
-        text-align: center;
+    #content>#summary {
+        align-items: center;
         width: 100%;
     }
 

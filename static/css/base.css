@@ -200,7 +200,6 @@ a#back {
 @media (max-width:750px) {
     .right-2 {
         display: none;
-        /* display: flex; */
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
@@ -212,6 +211,7 @@ a#back {
         padding: 0;
         width: 100px;
         height: 120px;
+        background-color: #ffffff;
     }
 
     .right-2 .fold1 {
