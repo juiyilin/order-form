@@ -24,7 +24,7 @@ def status():
         company=request.json['company']
         email=request.json['email']
         if valid_email(email)==None:
-            abort(400,'密碼格式錯誤')
+            abort(400,'信箱格式錯誤')
         password=to_hash(request.json['password'])
         conn,cursor=connect_db(db)
         print('是否連線',conn.is_connected())

@@ -22,14 +22,14 @@ nav {
     margin: 0 10px;
 }
 
-.content {
+#content {
     width: 1200px;
     margin: 100px auto;
     display: flex;
     justify-content: space-evenly;
 }
 
-.content div {
+#content div {
     border: 3px solid #e8e8e8;
     border-radius: 20px;
     width: 200px;
@@ -55,12 +55,12 @@ nav {
     }
 }
 
-.content div:hover {
+#content div:hover {
     background-color: #448899;
     animation: slow-in 0.2s;
 }
 
-.content div a {
+#content div a {
     text-decoration: none;
     color: #000000;
     width: 101%;
@@ -69,25 +69,25 @@ nav {
     line-height: 200px;
 }
 
-.content div a:hover {
+#content div a:hover {
     color: #ffffff;
 }
 
 @media (max-width:1200px) {
-    .content {
+    #content {
         padding: 0 10px;
         width: 100%;
     }
 }
 
 @media (max-width:700px) {
-    .content div {
+    #content div {
         width: 100px;
         height: 100px;
         font-size: 25px;
     }
 
-    .content div a {
+    #content div a {
         line-height: 100px;
     }
 }

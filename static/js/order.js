@@ -266,6 +266,8 @@ orderForm.addEventListener('submit', (event) => {
         // console.log(result);
         if (result.success) {
             window.location.reload();
+        } else {
+            alert(result.message);
         }
     });
 });

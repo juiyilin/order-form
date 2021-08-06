@@ -66,24 +66,30 @@ createPoducts.addEventListener('submit', (event) => {
     let inputs = createPoducts.querySelectorAll('input');
     let itemNumber = inputs[0].value;
     let price = inputs[1].value;
-    fetch('/api/products', {
-        method: 'POST',
-        body: JSON.stringify({
-            itemNumber: itemNumber,
-            price: price
-        }),
-        headers: {
-            'content-type': 'application/json'
-        }
-    }).then(res => res.json()).then(result => {
-        // console.log(result);
-        if (result.success) {
-            alert('新增成功');
-            window.location.reload();
-        } else {
-            alert(result.message);
-        }
-    });
+    let priceZero = true;
+    if (price == '') {
+        priceZero = confirm('價格將預設為0元，確定嗎？');
+    }
+    if (priceZero) {
+        fetch('/api/products', {
+            method: 'POST',
+            body: JSON.stringify({
+                itemNumber: itemNumber,
+                price: price
+            }),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(res => res.json()).then(result => {
+            // console.log(result);
+            if (result.success) {
+                alert('新增成功');
+                window.location.reload();
+            } else {
+                alert(result.message);
+            }
+        });
+    }
 });
 
 window.addEventListener('load', () => {

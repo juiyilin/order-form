@@ -1,6 +1,7 @@
 from flask import Blueprint, request, session, jsonify, abort
 from create_db_table import db, connect_db, close_db
 import json
+from api.accounts import valid_email
 
 orders = Blueprint('orders', __name__)
 
@@ -44,7 +45,9 @@ def order():
         address=request.json['address']
         tax_id=request.json['taxId']
         comment=request.json['comment']
-
+        if valid_email(email)==None:
+            close_db(conn,cursor)
+            abort(400,'信箱格式錯誤')
         try:
             cursor.execute('''
                 insert into orders (company_id, submitter_id, show_id, customer,products, quantities, total, phone, email, address, tax_id, comment) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
@@ -94,6 +97,10 @@ def order_id(orderNum):
         address=request.json['address']
         tax_id=request.json['taxId']
         comment=request.json['comment']
+
+        if valid_email(email)==None:
+            close_db(conn,cursor)
+            abort(400,'信箱格式錯誤')
         #get id
         try:
             cursor.execute('''

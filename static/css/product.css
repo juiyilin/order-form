@@ -1,3 +1,7 @@
+sub {
+    color: #dc3545;
+}
+
 #list-products {
     margin: 0 0 50px 0;
 
