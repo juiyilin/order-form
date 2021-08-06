@@ -31,11 +31,11 @@ function searchPostCode(search, address) {
         if (address.value !== '') {
             fetch(`http://zip5.5432.tw/zip5json.py?adrs=${address.value}`).then(res => res.json())
                 .then(data => {
-                    // console.log(data)
+                    console.log(data)
                     if (data.zipcode === '' && data.zipcode6 === '') {
                         alert('請確認\n1. 住址是否填寫完整\n2. 巷、弄、號是否用半形數字輸入');
                     } else {
-                        address.value = data.new_adrs;
+                        address.value = data.new_adrs6;
                     }
                 });
 
