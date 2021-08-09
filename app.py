@@ -17,7 +17,7 @@ app.register_blueprint(orders, url_prefix='/api')
 app.register_blueprint(export)
 
 app.config['JSON_AS_ASCII']=False
-app.config['SEND_FILE_MAX_AGE_DEFAULT']=0
+#app.config['SEND_FILE_MAX_AGE_DEFAULT']=0
 app.secret_key=urandom(24)
 
 
