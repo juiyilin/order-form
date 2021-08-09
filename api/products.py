@@ -9,11 +9,11 @@ def product():
     if 'company' not in session:
         abort(403)
     else:
-        conn, cursor = connect_db(db)
         company_id = session['company']['id']
         if request.method == 'GET':
             print('get products')
 
+            conn, cursor = connect_db(db)
             cursor.execute('select item_number,price from products where company_id=%s order by item_number', (company_id, ))
             get_all = cursor.fetchall()
             close_db(conn, cursor)
@@ -28,6 +28,7 @@ def product():
             if price == '':
                 price = 0
             try:
+                conn, cursor = connect_db(db)
                 cursor.execute('''
                     select item_number from products 
                     where company_id = %s and item_number = %s ''',(company_id,item_number))
@@ -53,6 +54,7 @@ def product():
             item_number=request.json['itemNumber']
             price=request.json['price']
             try:
+                conn, cursor = connect_db(db)
                 cursor.execute('delete from products where item_number=%s and price=%s and company_id=%s',(item_number,price,company_id))
             except:
                 close_db(conn, cursor)

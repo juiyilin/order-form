@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, jsonify, abort,send_file
+from flask import Blueprint, request, session, abort,send_file
 from create_db_table import db, connect_db, close_db
 import pandas as pd
 import json

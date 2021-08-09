@@ -2,8 +2,9 @@ function listProducts(data) {
     let listProducts = select('#list-products');
     if (data.length == 0) {
         let row = document.createElement('div');
+        row.className = 'row';
         row.textContent = '沒有產品資料';
-        row.style.textAlign = 'center';
+        row.style.justifyContent = 'center';
         listProducts.appendChild(row);
     } else {
         for (let j = 0; j < data.length; j++) {

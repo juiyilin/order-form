@@ -7,12 +7,12 @@ orders = Blueprint('orders', __name__)
 
 @orders.route('/orders', methods = ['GET', 'POST'])
 def order():
-    conn,cursor=connect_db(db)
     company_id=session['company']['id']
     show_id=session['show']['id']
     if request.method=='GET':
         print('get all orders')
         try:
+            conn,cursor=connect_db(db)
             cursor.execute('''
             select orders.customer,orders.products,orders.quantities,orders.total, accounts.name from orders 
             inner join accounts on orders.submitter_id = accounts.id 
@@ -47,9 +47,9 @@ def order():
         comment=request.json['comment']
         if email!='':
             if valid_email(email)==None:
-                close_db(conn,cursor)
                 abort(400,'信箱格式錯誤')
         try:
+            conn,cursor=connect_db(db)
             cursor.execute('''
                 insert into orders (company_id, submitter_id, show_id, customer,products, quantities, total, phone, email, address, tax_id, comment) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             ''',(company_id,submitter_id,show_id,customer,products,quantities,total,phone,email,address,tax_id,comment))
@@ -62,13 +62,13 @@ def order():
 
 @orders.route('/order/<orderNum>', methods = ['GET', 'PATCH'])
 def order_id(orderNum):
-    conn,cursor=connect_db(db)
     company_id=session['company']['id']
     show_id=session['show']['id']
     order_num=int(orderNum)-1
     if request.method=='GET':
         print('get one order')
         try:
+            conn,cursor=connect_db(db)
             cursor.execute('''
             select orders.customer,orders.products,orders.quantities,orders.total,orders.phone,orders.email,orders.address,orders.tax_id,orders.comment, accounts.name from orders 
             inner join accounts on orders.submitter_id = accounts.id 
@@ -100,10 +100,10 @@ def order_id(orderNum):
         comment=request.json['comment']
         if email!='':
             if valid_email(email)==None:
-                close_db(conn,cursor)
                 abort(400,'信箱格式錯誤')
         #get id
         try:
+            conn,cursor=connect_db(db)
             cursor.execute('''
             select orders.id from orders 
             inner join accounts on orders.submitter_id = accounts.id 

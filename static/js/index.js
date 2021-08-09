@@ -57,10 +57,10 @@ forms.forEach(form => {
                 .then(result => {
                     // console.log(result);
                     if (result.success) {
+                        processing.textContent = '註冊完成';
                         window.location = `/${formData.get('company')}/menu`;
                     } else {
                         alert(result.message);
-                        processing.textContent = '註冊完成';
                     }
                 });
         }

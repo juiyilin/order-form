@@ -1,5 +1,15 @@
 function caculate(qArray, pArray, amtArray, ttl) {
     for (let i = 0; i < qArray.length; i++) {
+        qArray[i].addEventListener('focus', () => {
+            if (qArray[i].value === '0') {
+                qArray[i].value = '';
+            }
+        });
+        qArray[i].addEventListener('blur', () => {
+            if (qArray[i].value === '') {
+                qArray[i].value = 0;
+            }
+        });
         qArray[i].addEventListener('change', () => {
             let q;
             if (qArray[i].value === '') {

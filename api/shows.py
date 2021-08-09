@@ -9,11 +9,11 @@ def show():
     if 'company' not in session:
         abort(403)
     else:
-        conn,cursor=connect_db(db)
         company_id=session['company']['id']
         if request.method=='GET':
             print('get all shows')
             try:
+                conn,cursor=connect_db(db)
                 cursor.execute('''
                 select id,show_name,region,DATE_FORMAT(start,"%Y/%m/%d"),DATE_FORMAT(end,"%Y/%m/%d") from shows 
                 where company_id=%s order by start desc
@@ -44,6 +44,7 @@ def show():
             region=request.json['region']
             start=request.json['start']
             end=request.json['end']
+            conn,cursor=connect_db(db)
             cursor.execute('select show_name from shows where company_id=%s and show_name=%s',(company_id,show_name))
             get_one=cursor.fetchone()
             if get_one==None:
@@ -76,6 +77,7 @@ def show():
             show_name=request.json['showName']
         
             try:
+                conn,cursor=connect_db(db)
                 cursor.execute('delete from shows where company_id=%s and show_name=%s',(company_id,show_name))
             except:
                 close_db(conn,cursor)
@@ -90,8 +92,8 @@ def show_id(show_name):
         abort(403)
     else:
         company_id=session['company']['id']
-        conn,cursor=connect_db(db)
         try:
+            conn,cursor=connect_db(db)
             cursor.execute('select id, show_name, region,DATE_FORMAT(start,"%Y/%m/%d"),DATE_FORMAT(end,"%Y/%m/%d") from shows where company_id=%s and show_name=%s',(company_id,show_name))
         except:
             close_db(conn,cursor)

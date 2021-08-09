@@ -1,5 +1,15 @@
 function caculate(qArray, pArray, amtArray, ttl) {
     for (let i = 0; i < qArray.length; i++) {
+        qArray[i].addEventListener('focus', () => {
+            if (qArray[i].value === '0') {
+                qArray[i].value = '';
+            }
+        });
+        qArray[i].addEventListener('blur', () => {
+            if (qArray[i].value === '') {
+                qArray[i].value = 0;
+            }
+        });
         qArray[i].addEventListener('change', () => {
             let q;
             if (qArray[i].value === '') {
@@ -31,7 +41,7 @@ function searchPostCode(search, address) {
         if (address.value !== '') {
             fetch(`http://zip5.5432.tw/zip5json.py?adrs=${address.value}`).then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     if (data.zipcode === '' && data.zipcode6 === '') {
                         alert('請確認\n1. 住址是否填寫完整\n2. 巷、弄、號是否用半形數字輸入');
                     } else {
