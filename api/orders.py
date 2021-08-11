@@ -86,7 +86,7 @@ def order_id(orderNum):
         
         return jsonify(data),200
         
-    if request.method=='PATCH':
+    elif request.method=='PATCH':
         print('patch one order')
         print(request.json)
         customer=request.json['customer']
@@ -121,7 +121,8 @@ def order_id(orderNum):
         conn.commit()
         close_db(conn,cursor)
         return jsonify({'success':True})
-
+    else:
+        abort(400)
 
 
 def data_handle(keys,data_row):

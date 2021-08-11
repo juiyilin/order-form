@@ -37,7 +37,7 @@ def show():
             print('shows',shows)
             return jsonify(shows),200
 
-        if request.method=='POST':
+        elif request.method=='POST':
             print('post show')
             print(request.json)
             show_name=request.json['showName']
@@ -71,7 +71,7 @@ def show():
                 close_db(conn,cursor)
                 abort(400,'此展覽名稱已存在')
 
-        if request.method=='DELETE':
+        elif request.method=='DELETE':
             print('delete show')
             print(request.json)
             show_name=request.json['showName']
@@ -85,12 +85,14 @@ def show():
             conn.commit()
             close_db(conn,cursor)
             return jsonify({'success':True}),200
-        
+        else:
+            abort(400)
+
 @shows.route('/show/<show_name>',methods=['GET'])
 def show_id(show_name):
     if 'company' not in session:
         abort(403)
-    else:
+    if request.method=='GET':
         company_id=session['company']['id']
         try:
             conn,cursor=connect_db(db)
@@ -107,3 +109,5 @@ def show_id(show_name):
             show[k]=v
         session['show']=show
         return jsonify({'success':True})
+    else:
+        abort(400)

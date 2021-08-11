@@ -18,7 +18,7 @@ def status():
         print(session)
         return jsonify(dict(session)),200
 
-    if request.method=='PATCH':
+    elif request.method=='PATCH':
         print('patch 更新session')
         # check mysql
         company=request.json['company']
@@ -60,54 +60,59 @@ def status():
         print(session)
         return jsonify(dict(session)),200
 
-    if request.method=='DELETE':
+    elif request.method=='DELETE':
         print(session.keys())
         session_keys=list(session.keys())
         for k in session_keys:
             session.pop(k)
         return jsonify({'success':True}),200
+    else:
+        abort(400)
 
     
 @accounts.route('/company', methods=['PATCH'])
 def company():
     if 'company' not in session:
         abort(403)
-    print('patch company')
-    print(request.files)
-    
-    company_id=session['company']['id']
-    company=session['company']['company']
-    img=request.files.get('logo')
-    img_link=''
-    if img!=None:
-        s3 = boto3.client(
-            "s3",
-            aws_access_key_id=AWSAccessKeyId,
-            aws_secret_access_key=AWSSecretKey
-        )
-        img_link=save_to_s3(s3,img,company,cdn_domain)
-        del_link=session.get('company').get('logo')
-        print(del_link)
-        if (del_link!='') and (del_link!=None):
-            print(del_link.split('net/')[1])
-            del_link_id=del_link.split('net/')[1]
-            delete_from_s3(s3,bucket_name,del_link_id)
-    try:
-        conn,cursor=connect_db(db)
-        cursor.execute('update companys set logo_link=%s where id=%s',(img_link,company_id))
-    except:
+    if request.method=='PATCH':
+        print('patch company')
+        print(request.files)
+        
+        company_id=session['company']['id']
+        company=session['company']['company']
+        img=request.files.get('logo')
+        img_link=''
+        if img!=None:
+            s3 = boto3.client(
+                "s3",
+                aws_access_key_id=AWSAccessKeyId,
+                aws_secret_access_key=AWSSecretKey
+            )
+            img_link=save_to_s3(s3,img,company,cdn_domain)
+            del_link=session.get('company').get('logo')
+            print(del_link)
+            if (del_link!='') and (del_link!=None):
+                print(del_link.split('net/')[1])
+                del_link_id=del_link.split('net/')[1]
+                delete_from_s3(s3,bucket_name,del_link_id)
+        try:
+            conn,cursor=connect_db(db)
+            cursor.execute('update companys set logo_link=%s where id=%s',(img_link,company_id))
+        except:
+            close_db(conn,cursor)
+            abort(500,'修改logo時發生不明錯誤')
+        conn.commit()
         close_db(conn,cursor)
-        abort(500,'修改logo時發生不明錯誤')
-    conn.commit()
-    close_db(conn,cursor)
-    session.pop('company')
-    session['company']={
-        'id':company_id,
-        'company':company,
-        'logo':img_link
-    }
-    
-    return jsonify({'success':True}),200
+        session.pop('company')
+        session['company']={
+            'id':company_id,
+            'company':company,
+            'logo':img_link
+        }
+        
+        return jsonify({'success':True}),200
+    else:
+        abort(400)
 
     
 
@@ -148,9 +153,8 @@ def content():
                     close_db(conn,cursor)
                     abort(403,'沒有權限')
 
-    if request.method=='POST':
+    elif request.method=='POST':
         
-
         if 'company' in request.form:
             print('post 第一次註冊帳號')
             print(request.form)
@@ -244,7 +248,7 @@ def content():
 
         return jsonify({'success':True}),200
 
-    if request.method=='PATCH':
+    elif request.method=='PATCH':
         if 'company' not in session:
             abort(403)
         else:
@@ -339,7 +343,7 @@ def content():
             return jsonify({'success':True}),200
 
 
-    if request.method=='DELETE':
+    elif request.method=='DELETE':
         print('delete 刪除帳號')
         print(request.json)
         name=request.json['name']
@@ -358,7 +362,8 @@ def content():
                 session.pop('user')
 
             return jsonify({'success':True}),200
- 
+    else:
+        abort(400)
 
 def valid_email(email):
     pattern=r'^\w+@\w+\.+\w+\.*\w*\.*\w*'

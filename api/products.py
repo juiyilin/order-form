@@ -20,7 +20,7 @@ def product():
 
             return jsonify(get_all), 200
 
-        if request.method == 'POST':
+        elif request.method == 'POST':
             print('post products')
             print(request.json)
             item_number = request.json['itemNumber']
@@ -48,7 +48,7 @@ def product():
             else :
                 close_db(conn, cursor)
                 abort(400, '此產品名稱已存在')
-        if request.method=='DELETE':
+        elif request.method=='DELETE':
             print('delete products')
             print(request.json)
             item_number=request.json['itemNumber']
@@ -62,3 +62,5 @@ def product():
             conn.commit()
             close_db(conn,cursor)
             return jsonify({'success':True}),200
+        else:
+            abort(400)
