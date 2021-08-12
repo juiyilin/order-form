@@ -348,9 +348,11 @@ def content():
         print(request.json)
         name=request.json['name']
         email=request.json['email']
+        company_id=session['company']['id']
+
         try:
             conn,cursor=connect_db(db)
-            cursor.execute('delete from accounts where name = %s and email = %s',(name,email))
+            cursor.execute('delete from accounts where company_id = %s and name = %s and email = %s',(company_id,name,email))
         except:
             close_db(conn,cursor)
             abort(500,'刪除帳號時發生不明錯誤')
