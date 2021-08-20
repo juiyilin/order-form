@@ -16,6 +16,7 @@ def status():
     if request.method=='GET':
         print('get 取得session')
         print(session)
+       
         return jsonify(dict(session)),200
 
     elif request.method=='PATCH':
@@ -166,9 +167,9 @@ def content():
 
             #驗證email
             if valid_email(email)==None:
-                conn,cursor=connect_db(db)
-                cursor.execute('delete from companys where company=%s',(company,))
-                close_db(conn,cursor)
+                # conn,cursor=connect_db(db)
+                # cursor.execute('delete from companys where company=%s',(company,))
+                # close_db(conn,cursor)
                 abort(400,'信箱格式錯誤')
             #hash password
             password=to_hash(request.form['password'])
@@ -191,32 +192,63 @@ def content():
                         )
                         img_link=save_to_s3(s3,img,company,cdn_domain)
                     try:
+                        #get last company id
+                        cursor.execute('select id from companys order by id desc limit 1')
+                        last_company_id=cursor.fetchone()[0]
+                        print(last_company_id)
+                    except:
+                        abort(500)
+                    
+                    try:
                         # insert company
                         cursor.execute('insert into companys (company,logo_link) values(%s,%s)',(company,img_link))
+                        user_id=insert_account(cursor,conn,last_company_id+1,name,email,password,authority)
+
                     except:
+                        conn.rollback()
                         close_db(conn,cursor)
                         abort(500,'新增公司時發生不明錯誤')
-                    
-                    else:
-                        conn.commit()
-                        company_id=cursor.lastrowid
-                        #company資料加入session
-                        session['company']={
-                            'id':company_id,
-                            'company':company,
-                            'logo':img_link
-                        }
-
-                        # 新增管理員帳號
-                        user_id=insert_account(cursor,conn,company_id,name,email,password,authority)
-                        close_db(conn,cursor)
+                    conn.commit()
+                    # company資料加入session
+                    session['company']={
+                        'id':last_company_id+1,
+                        'company':company,
+                        'logo':img_link
+                    }
                         # 新增完更新session
-                        session['user']={
-                            'id':user_id,
-                            'name':name,
-                            'email':email,
-                            'auth':authority
-                        }
+                    session['user']={
+                        'id':user_id,
+                        'name':name,
+                        'email':email,
+                        'auth':authority
+                    }
+                    # try:
+                    #     # insert company
+                    #     cursor.execute('insert into companys (company,logo_link) values(%s,%s)',(company,img_link))
+                    # except:
+                    #     close_db(conn,cursor)
+                    #     abort(500,'新增公司時發生不明錯誤')
+                    
+                    # else:
+                    #     conn.commit()
+                    #     company_id=cursor.lastrowid
+                    #     #company資料加入session
+                    #     session['company']={
+                    #         'id':company_id,
+                    #         'company':company,
+                    #         'logo':img_link
+                    #     }
+
+                    #     # 新增管理員帳號
+                    #     user_id=insert_account(cursor,conn,company_id,name,email,password,authority)
+                    #     close_db(conn,cursor)
+                    #     # 新增完更新session
+                    #     session['user']={
+                    #         'id':user_id,
+                    #         'name':name,
+                    #         'email':email,
+                    #         'auth':authority
+                    #     }
                 else:
                     close_db(conn,cursor)
                     abort(400,'新增失敗，公司名稱 已被使用')
@@ -387,6 +419,7 @@ def insert_account(cursor,conn,company_id,name,email,password,authority):
         insert into accounts (company_id, name, email, password, authority) values(%s,%s,%s,%s,%s)
         ''',(company_id,name,email,password,authority))
     except:
+        conn.rollback()
         close_db(conn,cursor)
         abort(500,'新增帳號時發生不明錯誤')
     conn.commit()
