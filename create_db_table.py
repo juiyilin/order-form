@@ -1,16 +1,7 @@
-import mysql.connector
 from mysql.connector.pooling import MySQLConnectionPool
 import config
 
 
-db=MySQLConnectionPool(
-    # host=config.host,
-    user=config.user, 
-    password=config.password, 
-    database='show_record_system',
-    pool_size=5,
-    pool_reset_session=True
-)
 
 def connect_db(db):
     conn=db.get_connection()
@@ -21,13 +12,6 @@ def close_db(conn,cursor):
     cursor.close()
     conn.close()
 
-# check dbs
-def db_exist(db,cursor,dbname):
-    cursor.execute('show databases')
-    dbs=[]
-    for db in cursor.fetchall():
-        dbs.append(db[0])
-    return dbname in dbs #boolen
 
     
 
@@ -95,19 +79,21 @@ def create_table(cursor,table_name):
             foreign key(show_id) references shows(id) on delete cascade
         )''')
 
+db=MySQLConnectionPool(
+    host='localhost',
+    user=config.user, 
+    password=config.password, 
+    database='show_record_system',
+    pool_size=1,
+    pool_reset_session=True
+)
+
 if __name__=='__main__':
-    db = mysql.connector.connect(
-        host=config.host,
-        user=config.user,
-        password=config.password
-    )
-    cursor=db.cursor()
+
+    conn,cursor=connect_db(db)
     db_name='show_record_system'
 
-    # database
-    if not db_exist(db,cursor,db_name):
-        cursor.execute(f'create database {db_name}')
-    db.database=db_name
+    
 
 
     # table

@@ -1,7 +1,6 @@
-from flask import Flask, render_template,Blueprint,jsonify,session,request,redirect
+from flask import Flask, render_template,Blueprint,jsonify,session,request,redirect,url_for
 from os import urandom
 
-from flask.helpers import url_for
 from api.accounts import accounts
 from api.products import products
 from api.shows import shows
