@@ -1,4 +1,4 @@
-# [消費者資訊紀錄系統](https://www.inforecord.me/)  
+# 消費者資訊紀錄系統  
 ![](https://user-images.githubusercontent.com/52588493/129036789-b6fd4137-fe86-4242-95a4-d1fec64a4ca6.png)  
 
 ## 資料庫設計  
@@ -15,7 +15,7 @@
 
 網站提供有展覽需求之公司，於會場記錄在什麼展覽、銷售什麼商品、給什麼對象，輔以圖表將銷量視覺化，並可將資料以 excel 格式匯出。佈署於雲端伺服器 AWS EC2，將使用者與訂單資訊儲存於 EC2 上之 MySQL 中，圖片上傳至 S3 搭配 CloudFront 的 CDN 服務取得連結，採 RESTful API 架構取得所需資料。  
 
-網址：[https://www.inforecord.me/](https://www.inforecord.me/)  
+網址：[https://www.inforecord.me/](https://www.inforecord.me/)  (已關閉)  
 測試公司：company  
 測試信箱：admin@admin.com  
 測試密碼：admin  
